@@ -1,26 +1,332 @@
 @import "tailwindcss";
 
+/* ------------------------------------------------------------------ *
+ * Design tokens
+ *
+ * Dark is the native palette and lives on :root. Light is applied either by
+ * `data-theme="light"` (set before first paint by the inline script in the root
+ * layout) or, for visitors without JavaScript, by the system preference.
+ * The two light blocks are deliberate duplicates — CSS cannot share one
+ * declaration list between an attribute selector and a media query.
+ * ------------------------------------------------------------------ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: dark;
+
+  --bg: #08080a;
+  --bg-elevated: #0e0e12;
+  --line: #1c1c22;
+  --line-strong: #2a2a33;
+
+  --fg: #f4f2ee;
+  --fg-muted: #9a99a4;
+  --fg-subtle: #63626c;
+
+  --accent: #ccff33;
+  --accent-ink: #0b0b0d;
+
+  /* Film grain sits on a dark page, so it lightens. */
+  --grain-blend: overlay;
+  --grain-opacity: 0.035;
+
+  /* Hero glow behind the particles. */
+  --glow-accent: rgba(204, 255, 51, 0.16);
+  --glow-indigo: rgba(63, 74, 190, 0.14);
+  --glow-halo: rgba(120, 140, 255, 0.12);
+
+  --radius: 14px;
+  --page-x: 1.5rem;
+  --max-w: 78rem;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --bg: #faf9f6;
+  --bg-elevated: #ffffff;
+  --line: #e6e3db;
+  --line-strong: #d2cec2;
+
+  --fg: #12120e;
+  --fg-muted: #5c5b54;
+  --fg-subtle: #6f6e66;
+
+  /* Neon lime is unreadable on paper — the accent deepens to hold ~5.7:1
+     against --bg while staying the same hue. */
+  --accent: #44700a;
+  --accent-ink: #f6ffe8;
+
+  --grain-blend: multiply;
+  --grain-opacity: 0.022;
+
+  --glow-accent: rgba(132, 204, 22, 0.2);
+  --glow-indigo: rgba(63, 74, 190, 0.13);
+  --glow-halo: rgba(99, 120, 255, 0.12);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    color-scheme: light;
+
+    --bg: #faf9f6;
+    --bg-elevated: #ffffff;
+    --line: #e6e3db;
+    --line-strong: #d2cec2;
+
+    --fg: #12120e;
+    --fg-muted: #5c5b54;
+    --fg-subtle: #6f6e66;
+
+    --accent: #44700a;
+    --accent-ink: #f6ffe8;
+
+    --grain-blend: multiply;
+    --grain-opacity: 0.022;
+
+    --glow-accent: rgba(132, 204, 22, 0.2);
+    --glow-indigo: rgba(63, 74, 190, 0.13);
+    --glow-halo: rgba(99, 120, 255, 0.12);
   }
 }
 
+@theme inline {
+  --color-bg: var(--bg);
+  --color-elevated: var(--bg-elevated);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-fg: var(--fg);
+  --color-muted: var(--fg-muted);
+  --color-subtle: var(--fg-subtle);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+
+  --font-sans: var(--font-sans-var), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono-var), ui-monospace, SFMono-Regular, monospace;
+  --font-display: var(--font-display-var), ui-serif, Georgia, serif;
+
+  --radius-card: var(--radius);
+
+  --animate-marquee: marquee 42s linear infinite;
+  --animate-drift: drift 9s ease-in-out infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Base
+ * ------------------------------------------------------------------ */
+* {
+  border-color: var(--line);
+}
+
+html {
+  background: var(--bg);
+  -webkit-tap-highlight-color: transparent;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  font-synthesis-weight: none;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ------------------------------------------------------------------ *
+ * Theme switching
+ * ------------------------------------------------------------------ */
+
+/* Colours snap during normal browsing (cheap); they cross-fade only for the
+   ~340ms after the toggle is pressed, which is when the change is intentional. */
+html.theme-switching,
+html.theme-switching *,
+html.theme-switching *::before,
+html.theme-switching *::after {
+  transition:
+    background-color 300ms ease,
+    border-color 300ms ease,
+    color 300ms ease,
+    fill 300ms ease,
+    stroke 300ms ease;
+}
+
+/* Each icon is visible in the theme it switches away from. */
+.theme-icon {
+  transition:
+    opacity 300ms ease,
+    transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.theme-icon-moon,
+[data-theme="light"] .theme-icon-sun {
+  opacity: 0;
+  transform: rotate(-70deg) scale(0.6);
+}
+.theme-icon-sun,
+[data-theme="light"] .theme-icon-moon {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+/* No-JS visitors on a light system: same swap, driven by the media query. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .theme-icon-sun {
+    opacity: 0;
+    transform: rotate(-70deg) scale(0.6);
+  }
+  :root:not([data-theme]) .theme-icon-moon {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+/* Project cover artwork is generated from bright per-project accents that go
+   pale on paper — deepen them rather than shipping a second palette per project. */
+[data-theme="light"] .cover-grid {
+  opacity: 0.22;
+  filter: brightness(0.7) saturate(1.4);
+}
+[data-theme="light"] .cover-tag {
+  filter: brightness(0.62) saturate(1.5);
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .cover-grid {
+    opacity: 0.22;
+    filter: brightness(0.7) saturate(1.4);
+  }
+  :root:not([data-theme]) .cover-tag {
+    filter: brightness(0.62) saturate(1.5);
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Intro curtain
+ *
+ * The overlay is server-rendered so it is already on screen at the first
+ * paint, but it stays hidden unless the pre-paint script opts in. Returning
+ * visitors and anyone without JavaScript therefore land straight on the site.
+ * ------------------------------------------------------------------ */
+#intro {
+  display: none;
+}
+
+html[data-intro="running"] #intro {
+  display: block;
+}
+
+/* The name is about to fly to this exact spot; the real logo waits its turn. */
+html[data-intro="running"] [data-brand] {
+  opacity: 0;
+}
+
+html[data-intro="running"] body {
+  overflow: hidden;
+}
+
+/* Lenis smooth scroll requirements */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* ------------------------------------------------------------------ *
+ * Utilities
+ * ------------------------------------------------------------------ */
+@utility page {
+  width: 100%;
+  max-width: var(--max-w);
+  margin-inline: auto;
+  padding-inline: var(--page-x);
+}
+
+/* Fluid display type — scales without breakpoint jumps */
+@utility text-display {
+  font-size: clamp(2.75rem, 9vw, 7.5rem);
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+  font-weight: 500;
+}
+
+@utility text-title {
+  font-size: clamp(2rem, 5vw, 3.75rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  font-weight: 500;
+}
+
+@utility text-lead {
+  font-size: clamp(1.05rem, 1.7vw, 1.375rem);
+  line-height: 1.55;
+  letter-spacing: -0.011em;
+}
+
+/* Small uppercase monospace label used to tag every section */
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+
+@utility serif-em {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+/* Film grain over the whole page — hides gradient banding behind the canvas */
+@utility grain {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: var(--grain-blend);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
