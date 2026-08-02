@@ -206,6 +206,14 @@ html[data-intro="running"] body {
   overflow: hidden;
 }
 
+/* The landing curtain is the one intentionally expressive moment: the warm
+   sign-paint colours and offset printing detail disappear with it, leaving the
+   portfolio itself free to use its own visual system. */
+.intro-sign {
+  color: #ffd447;
+  text-shadow: 0.05em 0.05em 0 #ed5d32;
+}
+
 /* Lenis smooth scroll requirements */
 html.lenis,
 html.lenis body {

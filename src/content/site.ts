@@ -9,7 +9,7 @@ export const site = {
   // The wordmark: what the opening curtain writes across the screen and what
   // the nav logo becomes when it lands. Change it in one place — the intro
   // measures the nav logo at runtime, so any length still lands on target.
-  brand: "Zyn Shamil",
+  brand: "Zyn Shamills",
   role: "Freelance full-stack frontend developer",
   // Shown on the generated OG image.
   location: "Remote · worldwide · based in India (UTC+5:30)",
@@ -38,7 +38,7 @@ export const hero = {
   // Rendered exactly as broken here — one line per entry, uppercased by the
   // `text-hero` type utility rather than in the copy, so screen readers and the
   // page's own metadata still get natural sentence case.
-  headlineLines: ["MAKE CORPORATE WEBAPP LESS BORING"],
+  headlineLines: ["MAKE WEB LESS BORING"],
   intro:
     "Full-Stack & Mobile Development | Frontend, Backend, & DevOps Solutions",
 };

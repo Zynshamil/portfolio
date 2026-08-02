@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
+import { HeroCanvas } from "@/components/three/hero-canvas";
 import { CtaButton } from "@/components/ui/button";
 import { SplitWords } from "@/components/ui/reveal";
 import { useIntroDone } from "@/components/ui/intro";
@@ -23,6 +24,11 @@ export function Hero() {
   return (
     <section className="relative flex min-h-svh items-center overflow-hidden border-b-4 border-accent px-0 py-24 md:py-28">
       <div className="poster-field pointer-events-none absolute inset-0" aria-hidden />
+      <HeroCanvas />
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-linear-to-t from-bg to-transparent"
+        aria-hidden
+      />
 
       <div className="page relative z-10 flex flex-col items-center text-center">
         {site.available && (

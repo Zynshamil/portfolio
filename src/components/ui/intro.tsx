@@ -11,12 +11,13 @@ import {
 } from "react";
 import { stagger, useAnimate, useReducedMotion } from "motion/react";
 import { site } from "@/content/site";
+import { IntroCanvas } from "@/components/three/intro-canvas";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 /** Slow-in, slow-out — the name feels carried to the corner, not thrown. */
 const TRAVEL_EASE = [0.76, 0, 0.24, 1] as const;
 
-const HOLD_MS = 420;
+const HOLD_MS = 1100;
 /** If anything above throws or stalls, the page must still become usable. */
 const FAILSAFE_MS = 6000;
 
@@ -158,14 +159,26 @@ function IntroCurtain({ onDone }: { onDone: () => void }) {
       aria-hidden
       className="pointer-events-none fixed inset-0 z-100"
     >
-      <div data-intro-panel className="absolute inset-0 bg-white" />
+      <div data-intro-panel className="absolute inset-0 overflow-hidden bg-[#153d8a]">
+        <div className="absolute -top-[28vmin] -right-[20vmin] h-[72vmin] w-[72vmin] rounded-full border-[min(1.25vw,14px)] border-[#ffd447]/85" />
+        <div className="absolute top-[14%] right-[11%] h-[15vmin] w-[15vmin] rounded-full bg-[#ed5d32]" />
+        <p className="absolute top-7 left-7 text-[10px] font-extrabold tracking-[0.18em] text-[#ffd447] uppercase sm:top-10 sm:left-10">
+          Full-stack developer / India + worldwide
+        </p>
+        <p className="absolute right-7 bottom-7 text-right text-[10px] font-extrabold tracking-[0.18em] text-[#ffd447] uppercase sm:right-10 sm:bottom-10">
+          Websites · apps · systems
+        </p>
+      </div>
+      <div className="absolute inset-0 opacity-90 mix-blend-screen">
+        <IntroCanvas />
+      </div>
 
       <div className="absolute inset-0 grid place-items-center">
         <span
           data-intro-name
           // Transforms measure from the corner the name is flying to, which is
           // what makes the FLIP arithmetic above a straight subtraction.
-          className="wordmark inline-block origin-top-left whitespace-nowrap text-[#0b0b0d] will-change-transform"
+          className="wordmark intro-sign inline-block origin-top-left whitespace-nowrap will-change-transform"
           style={{ fontSize: "clamp(2.25rem, 11vw, 7rem)" }}
         >
           {letters.map((letter, index) => (
