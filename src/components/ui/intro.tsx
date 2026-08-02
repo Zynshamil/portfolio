@@ -165,7 +165,7 @@ function IntroCurtain({ onDone }: { onDone: () => void }) {
           data-intro-name
           // Transforms measure from the corner the name is flying to, which is
           // what makes the FLIP arithmetic above a straight subtraction.
-          className="inline-block origin-top-left font-mono leading-none tracking-tight whitespace-nowrap text-[#0b0b0d] will-change-transform"
+          className="wordmark inline-block origin-top-left whitespace-nowrap text-[#0b0b0d] will-change-transform"
           style={{ fontSize: "clamp(2.25rem, 11vw, 7rem)" }}
         >
           {letters.map((letter, index) => (
@@ -190,12 +190,13 @@ function IntroCurtain({ onDone }: { onDone: () => void }) {
  */
 function Masked({ children, dot }: { children: ReactNode; dot?: boolean }) {
   return (
-    // Padding keeps the descender of a "y" clear of the mask's teeth.
-    <span className="inline-block overflow-hidden pb-[0.14em] align-bottom">
+    // The wordmark is all caps, so there are no descenders to clear — just
+    // enough slack that the mask's edge never shaves the baseline.
+    <span className="inline-block overflow-hidden pb-[0.04em] align-bottom">
       <span
         data-intro-char
         data-intro-dot={dot ? "" : undefined}
-        className={dot ? "inline-block text-[#44700a]" : "inline-block"}
+        className={dot ? "inline-block text-[#ed5d32]" : "inline-block"}
         style={{ transform: "translateY(105%)" }}
       >
         {children}

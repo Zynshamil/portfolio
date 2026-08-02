@@ -28,27 +28,23 @@ export function Nav() {
       <nav className="page flex h-16 items-center justify-between md:h-20">
         {/* The intro curtain measures this element and flies its own copy of the
             wordmark onto it, so the two must stay typographically identical —
-            same family, size, tracking and the leading-none tight box. */}
-        <Link
-          href="/"
-          data-brand
-          className="font-mono text-sm leading-none tracking-tight text-fg"
-        >
+            hence the shared `wordmark` utility rather than loose classes. */}
+        <Link href="/" data-brand className="wordmark text-sm text-fg">
           {site.brand}
           <span className="text-accent">.</span>
         </Link>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 sm:gap-4">
           {site.available && (
-            <span className="hidden items-center gap-2 rounded-full border border-line-strong px-3 py-1.5 sm:inline-flex">
+            <a href={`mailto:${site.email}`} className="hidden items-center gap-2 border-y border-line-strong px-3 py-1.5 transition-colors hover:bg-fg/10 sm:inline-flex">
               <span className="relative flex h-1.5 w-1.5">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-70" />
                 <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
               </span>
-              <span className="font-mono text-[11px] tracking-wider text-muted uppercase">
-                Available
+              <span className="label text-muted">
+                Let&apos;s talk
               </span>
-            </span>
+            </a>
           )}
 
           <ThemeToggle />

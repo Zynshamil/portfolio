@@ -38,12 +38,7 @@ export const hero = {
   // Rendered exactly as broken here — one line per entry, uppercased by the
   // `text-hero` type utility rather than in the copy, so screen readers and the
   // page's own metadata still get natural sentence case.
-  headlineLines: ["Make", "corporate websites", "less boring"],
+  headlineLines: ["MAKE CORPORATE WEBAPP LESS BORING"],
   intro:
-    "Freelance full-stack frontend developer with 3+ years in React and Next.js. I ship high-performance, composable interfaces — headless CMS, sub-second search, SSR/ISR — backed by Node, Express and MongoDB when a project needs the whole stack.",
-  stats: [
-    { value: "3+", label: "Years shipping" },
-    { value: "+20%", label: "Conversion lift, e-commerce" },
-    { value: "-40%", label: "Page load, platform revamp" },
-  ],
+    "Full-Stack & Mobile Development | Frontend, Backend, & DevOps Solutions",
 };

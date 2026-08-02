@@ -12,25 +12,29 @@
 :root {
   color-scheme: dark;
 
-  --bg: #08080a;
-  --line: #1c1c22;
-  --line-strong: #2a2a33;
+  /* A deep sign-painter's blue gives the page its immediate point of view.
+     Yellow carries the important words; the orange is a restrained print
+     registration accent, never a third competing interface colour. */
+  --bg: #153d8a;
+  --line: rgba(255, 230, 121, 0.3);
+  --line-strong: rgba(255, 230, 121, 0.58);
 
-  --fg: #f4f2ee;
-  --fg-muted: #9a99a4;
-  --fg-subtle: #63626c;
+  --fg: #fff6d5;
+  --fg-muted: #d9e4ff;
+  --fg-subtle: #afc5ed;
 
-  --accent: #ccff33;
-  --accent-ink: #0b0b0d;
+  --accent: #ffd447;
+  --accent-ink: #123579;
+  --offset: #ed5d32;
 
   /* Film grain sits on a dark page, so it lightens. */
   --grain-blend: overlay;
-  --grain-opacity: 0.035;
+  --grain-opacity: 0.045;
 
   /* Hero glow behind the particles. */
-  --glow-accent: rgba(204, 255, 51, 0.16);
-  --glow-indigo: rgba(63, 74, 190, 0.14);
-  --glow-halo: rgba(120, 140, 255, 0.12);
+  --glow-accent: rgba(255, 212, 71, 0.16);
+  --glow-indigo: rgba(16, 45, 111, 0.28);
+  --glow-halo: rgba(237, 93, 50, 0.13);
   --page-x: 1.5rem;
   --max-w: 78rem;
 }
@@ -38,48 +42,50 @@
 :root[data-theme="light"] {
   color-scheme: light;
 
-  --bg: #faf9f6;
-  --line: #e6e3db;
-  --line-strong: #d2cec2;
+  --bg: #fff7df;
+  --line: #d9c783;
+  --line-strong: #b99e3b;
 
-  --fg: #12120e;
-  --fg-muted: #5c5b54;
-  --fg-subtle: #6f6e66;
+  --fg: #123579;
+  --fg-muted: #345894;
+  --fg-subtle: #5975a5;
 
-  /* Neon lime is unreadable on paper — the accent deepens to hold ~5.7:1
-     against --bg while staying the same hue. */
-  --accent: #44700a;
-  --accent-ink: #f6ffe8;
+  /* On the paper palette, the accent becomes blue so it still holds strong
+     contrast against the warm stock. */
+  --accent: #17469a;
+  --accent-ink: #fff7df;
+  --offset: #ef7447;
 
   --grain-blend: multiply;
   --grain-opacity: 0.022;
 
-  --glow-accent: rgba(132, 204, 22, 0.2);
-  --glow-indigo: rgba(63, 74, 190, 0.13);
-  --glow-halo: rgba(99, 120, 255, 0.12);
+  --glow-accent: rgba(255, 211, 71, 0.35);
+  --glow-indigo: rgba(23, 70, 154, 0.12);
+  --glow-halo: rgba(239, 116, 71, 0.13);
 }
 
 @media (prefers-color-scheme: light) {
   :root:not([data-theme]) {
     color-scheme: light;
 
-    --bg: #faf9f6;
-    --line: #e6e3db;
-    --line-strong: #d2cec2;
+    --bg: #fff7df;
+    --line: #d9c783;
+    --line-strong: #b99e3b;
 
-    --fg: #12120e;
-    --fg-muted: #5c5b54;
-    --fg-subtle: #6f6e66;
+    --fg: #123579;
+    --fg-muted: #345894;
+    --fg-subtle: #5975a5;
 
-    --accent: #44700a;
-    --accent-ink: #f6ffe8;
+    --accent: #17469a;
+    --accent-ink: #fff7df;
+    --offset: #ef7447;
 
     --grain-blend: multiply;
     --grain-opacity: 0.022;
 
-    --glow-accent: rgba(132, 204, 22, 0.2);
-    --glow-indigo: rgba(63, 74, 190, 0.13);
-    --glow-halo: rgba(99, 120, 255, 0.12);
+    --glow-accent: rgba(255, 211, 71, 0.35);
+    --glow-indigo: rgba(23, 70, 154, 0.12);
+    --glow-halo: rgba(239, 116, 71, 0.13);
   }
 }
 
@@ -92,9 +98,9 @@
   --color-accent: var(--accent);
   --color-accent-ink: var(--accent-ink);
 
-  --font-sans: var(--font-sans-var), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-mono-var), ui-monospace, SFMono-Regular, monospace;
-  --font-display: var(--font-display-var), ui-serif, Georgia, serif;
+  /* Deliberately the only family on the page. */
+  --font-sans:
+    var(--font-sans-var), "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 /* ------------------------------------------------------------------ *
@@ -222,46 +228,116 @@ html.lenis body {
   padding-inline: var(--page-x);
 }
 
+/* ---- Poster type -------------------------------------------------- *
+ * Everything here is one idea: caps set at maximum weight, tracked in and
+ * leaded so tight the lines lock into a single printed slab. That density is
+ * the whole effect — loosen the leading and it turns back into a web page.
+ * ------------------------------------------------------------------- */
+
 /* Fluid display type — scales without breakpoint jumps */
 @utility text-display {
-  font-size: clamp(2.75rem, 9vw, 7.5rem);
-  line-height: 0.92;
-  letter-spacing: -0.04em;
-  font-weight: 500;
-}
-
-/* Hero headline. The copy is hard-broken into three lines, so this sits a
-   clear notch under text-display: big enough to lead the page, small enough
-   that "CORPORATE WEBSITES" holds one line down to a 360px phone. */
-@utility text-hero {
-  font-size: clamp(1.75rem, 5.6vw, 4rem);
-  line-height: 1.05;
-  letter-spacing: -0.03em;
-  font-weight: 500;
+  font-size: clamp(2.5rem, 8vw, 6rem);
+  line-height: 0.86;
+  letter-spacing: -0.025em;
+  font-weight: 800;
+  font-stretch: 108%;
   text-transform: uppercase;
 }
 
-@utility text-lead {
-  font-size: clamp(1.05rem, 1.7vw, 1.375rem);
-  line-height: 1.55;
-  letter-spacing: -0.011em;
+/* Hero headline. The copy is hard-broken into three lines, so the longest one
+   sets the size: "CORPORATE WEBSITES" measures ~11.96em at this weight, and
+   the column is the viewport less 2 × --page-x. That works out to a hard
+   ceiling of ~7.3vw, so 7vw keeps the type flush to the measure — poster-wide
+   — with a little slack left at every width. The rem floor only ever engages
+   below a 314px viewport, which no real device has. */
+@utility text-hero {
+  font-size: clamp(2.25rem, 7.2vw, 6.5rem);
+  line-height: 0.78;
+  letter-spacing: -0.055em;
+  font-weight: 900;
+  text-transform: uppercase;
 }
 
-/* Small uppercase monospace label used to tag every section */
+@utility text-hero-centred {
+  max-width: 16ch;
+}
+
+/* The wordmark, shared by the nav logo and the intro curtain that flies onto
+   it. The two are measured against each other at runtime, so any change here
+   has to stay in one utility rather than being spelled out at both ends. */
+@utility wordmark {
+  font-weight: 800;
+  font-stretch: 115%;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+/* Body copy carries a little extra weight so it still reads as printed
+   alongside the headline rather than as a caption under it. */
+@utility text-lead {
+  font-size: clamp(1.05rem, 1.7vw, 1.375rem);
+  line-height: 1.5;
+  letter-spacing: -0.005em;
+  font-weight: 500;
+}
+
+/* Small bold caps used to tag every section — the fine print on the poster. */
 @utility eyebrow {
-  font-family: var(--font-mono);
   font-size: 0.6875rem;
-  letter-spacing: 0.18em;
+  font-weight: 700;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--fg-subtle);
 }
 
-@utility serif-em {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 400;
-  letter-spacing: -0.02em;
+/* Same fine print, wherever it needs to inherit its own colour. */
+@utility label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }
+
+/* Emphasis gets painted, not italicised. Cloning the decoration keeps the
+   block intact when the phrase wraps to a second line. */
+@utility mark-em {
+  background: var(--accent);
+  color: var(--accent-ink);
+  padding-inline: 0.12em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* A tiny misregistration makes the display type feel screen-printed rather
+   than digitally perfect. It is deliberately only 0.045em, so the headline
+   remains crisp at every size. */
+@utility poster-shadow {
+  text-shadow: 0.045em 0.045em 0 var(--offset);
+}
+
+/* The hero's decorative field: a very quiet sunburst plus two sign-paint
+   borders. It has no text content and is hidden from assistive technology. */
+@utility poster-field {
+  background:
+    linear-gradient(90deg, transparent 0 70%, rgba(255, 212, 71, 0.08) 70% 70.25%, transparent 70.25%),
+    repeating-conic-gradient(from -16deg at 83% 51%, rgba(255, 212, 71, 0.13) 0deg 4deg, transparent 4deg 14deg),
+    linear-gradient(115deg, rgba(11, 42, 108, 0.22), transparent 56%);
+}
+
+@utility poster-stamp {
+  border: 2px solid var(--accent);
+  border-radius: 999px;
+  color: var(--accent);
+  font-size: 0.625rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  line-height: 1.15;
+  padding: 0.75rem 0.55rem;
+  text-align: center;
+  text-transform: uppercase;
+}
+
 
 /* Film grain over the whole page — hides gradient banding behind the canvas */
 @utility grain {
