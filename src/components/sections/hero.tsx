@@ -47,15 +47,24 @@ export function Hero() {
           </motion.div>
         )}
 
-        <h1 className="text-display max-w-[16ch] text-balance">
-          <SplitWords text={hero.headlineTop} delay={0.15} start={ready} />{" "}
-          <SplitWords
-            text={hero.headlineEm}
-            wordClassName="serif-em text-accent"
-            delay={0.3}
-            start={ready}
-          />{" "}
-          <SplitWords text={hero.headlineBottom} delay={0.45} start={ready} />
+        {/* One block per line, so the copy breaks where it was written rather
+            than wherever the container happens to run out. */}
+        <h1 className="text-hero">
+          {hero.headlineLines.map((line, index) => (
+            <span key={line} className="block">
+              <SplitWords
+                text={line}
+                // The last line is the punchline, so it carries the accent.
+                wordClassName={
+                  index === hero.headlineLines.length - 1
+                    ? "text-accent"
+                    : undefined
+                }
+                delay={0.15 + index * 0.12}
+                start={ready}
+              />
+            </span>
+          ))}
         </h1>
 
         <motion.p

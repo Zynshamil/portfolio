@@ -280,6 +280,17 @@ html.lenis body {
   font-weight: 500;
 }
 
+/* Hero headline. The copy is hard-broken into three lines, so this sits a
+   clear notch under text-display: big enough to lead the page, small enough
+   that "CORPORATE WEBSITES" holds one line down to a 360px phone. */
+@utility text-hero {
+  font-size: clamp(1.75rem, 5.6vw, 4rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
 @utility text-title {
   font-size: clamp(2rem, 5vw, 3.75rem);
   line-height: 1.02;

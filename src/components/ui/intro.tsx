@@ -11,7 +11,6 @@ import {
 } from "react";
 import { stagger, useAnimate, useReducedMotion } from "motion/react";
 import { site } from "@/content/site";
-import { INTRO_KEY } from "@/lib/intro";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 /** Slow-in, slow-out — the name feels carried to the corner, not thrown. */
@@ -54,12 +53,6 @@ function IntroCurtain({ onDone }: { onDone: () => void }) {
   const reduced = useReducedMotion();
 
   useEffect(() => {
-    // Written at the start, not the end: a reload mid-animation should land on
-    // the site, not replay the opening.
-    try {
-      sessionStorage.setItem(INTRO_KEY, "1");
-    } catch {}
-
     let settled = false;
     let timer: ReturnType<typeof setTimeout> | undefined;
 

@@ -63,7 +63,13 @@ export function SplitWords({
   const reduced = useReducedMotion();
   const words = text.split(" ");
 
-  if (reduced) return <span className={className}>{text}</span>;
+  // Still carries the per-word styling — it is colour and typeface, not motion.
+  if (reduced)
+    return (
+      <span className={className}>
+        {wordClassName ? <span className={wordClassName}>{text}</span> : text}
+      </span>
+    );
 
   return (
     <motion.span

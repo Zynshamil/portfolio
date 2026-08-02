@@ -42,9 +42,10 @@ export const site = {
 /* ── Hero ─────────────────────────────────────────────────────────── */
 
 export const hero = {
-  headlineTop: "I build fast, composable",
-  headlineEm: "web products",
-  headlineBottom: "that move the numbers.",
+  // Rendered exactly as broken here — one line per entry, uppercased by the
+  // `text-hero` type utility rather than in the copy, so screen readers and the
+  // page's own metadata still get natural sentence case.
+  headlineLines: ["Make", "corporate websites", "less boring"],
   intro:
     "Freelance full-stack frontend developer with 3+ years in React and Next.js. I ship high-performance, composable interfaces — headless CMS, sub-second search, SSR/ISR — backed by Node, Express and MongoDB when a project needs the whole stack.",
   stats: [
