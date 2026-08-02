@@ -75,11 +75,7 @@ export function Hero() {
         </motion.p>
 
         <motion.div {...fade(0.88)} className="mt-10 flex flex-wrap gap-3">
-          <CtaButton href="/#work">See the work</CtaButton>
-          <CtaButton
-            href={site.callUrl || `mailto:${site.email}`}
-            variant="ghost"
-          >
+          <CtaButton href={site.callUrl || `mailto:${site.email}`}>
             {site.callUrl ? "Book a call" : "Start a project"}
           </CtaButton>
         </motion.div>

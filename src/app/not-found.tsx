@@ -9,13 +9,10 @@ export default function NotFound() {
           This page <span className="serif-em text-accent">doesn&apos;t exist</span>.
         </h1>
         <p className="mt-8 max-w-md text-lead text-muted">
-          The link may be out of date, or the case study may have moved.
+          The link may be out of date, or the page may have moved.
         </p>
-        <div className="mt-10 flex flex-wrap gap-3">
+        <div className="mt-10">
           <CtaButton href="/">Back to home</CtaButton>
-          <CtaButton href="/#work" variant="ghost">
-            See the work
-          </CtaButton>
         </div>
       </div>
     </section>

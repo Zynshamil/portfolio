@@ -1,8 +1,9 @@
-import { faqs, hero, site } from "@/content/site";
+import { hero, site } from "@/content/site";
 
 /**
  * Structured data for the home page. The Person block is what feeds Google's
- * knowledge panel for your name; the FAQ block can win an expanded result.
+ * knowledge panel for your name. There is deliberately no FAQPage block — that
+ * markup is only valid when the questions are visible on the page.
  */
 export function JsonLd() {
   const person = {
@@ -13,9 +14,7 @@ export function JsonLd() {
     email: `mailto:${site.email}`,
     jobTitle: site.role,
     description: hero.intro,
-    sameAs: site.socials
-      .filter((social) => social.href.startsWith("http"))
-      .map((social) => social.href),
+    sameAs: site.profiles,
     knowsAbout: [
       "Next.js",
       "React",
@@ -26,28 +25,10 @@ export function JsonLd() {
     ],
   };
 
-  const faqPage = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqs.map((faq) => ({
-      "@type": "Question",
-      name: faq.q,
-      acceptedAnswer: { "@type": "Answer", text: faq.a },
-    })),
-  };
-
   return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(person) }}
-      />
-      {faqs.length > 0 && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqPage) }}
-        />
-      )}
-    </>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(person) }}
+    />
   );
 }

@@ -3,20 +3,11 @@
 import Link from "next/link";
 import { useRef, type ReactNode } from "react";
 import { motion, useMotionValue, useSpring, useReducedMotion } from "motion/react";
-import { cn } from "@/lib/utils";
 
 const MotionLink = motion.create(Link);
 
-type Variant = "primary" | "ghost";
-
-const base =
-  "group relative inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-medium tracking-tight transition-colors duration-300 will-change-transform";
-
-const variants: Record<Variant, string> = {
-  primary: "bg-accent text-accent-ink hover:bg-fg",
-  ghost:
-    "border border-line-strong text-fg hover:border-fg/40 hover:bg-fg/[0.05]",
-};
+const styles =
+  "group relative inline-flex items-center justify-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-medium tracking-tight text-accent-ink transition-colors duration-300 will-change-transform hover:bg-fg";
 
 /**
  * CTA that leans toward the cursor. The pull is small on purpose — enough to
@@ -26,15 +17,9 @@ const variants: Record<Variant, string> = {
 export function CtaButton({
   href,
   children,
-  variant = "primary",
-  className,
-  external,
 }: {
   href: string;
   children: ReactNode;
-  variant?: Variant;
-  className?: string;
-  external?: boolean;
 }) {
   const ref = useRef<HTMLAnchorElement>(null);
   const reduced = useReducedMotion();
@@ -56,7 +41,7 @@ export function CtaButton({
     y.set(0);
   };
 
-  const isExternal = external ?? (href.startsWith("http") || href.startsWith("mailto:"));
+  const isExternal = href.startsWith("http") || href.startsWith("mailto:");
 
   const content = (
     <>
@@ -72,7 +57,7 @@ export function CtaButton({
 
   const motionProps = {
     ref,
-    className: cn(base, variants[variant], className),
+    className: styles,
     style: { x: springX, y: springY },
     onPointerMove: onMove,
     onPointerLeave: reset,
@@ -95,41 +80,5 @@ export function CtaButton({
     <MotionLink {...motionProps} href={href}>
       {content}
     </MotionLink>
-  );
-}
-
-/** Text link with an underline that wipes in from the left on hover. */
-export function UnderlineLink({
-  href,
-  children,
-  className,
-}: {
-  href: string;
-  children: ReactNode;
-  className?: string;
-}) {
-  const isExternal = href.startsWith("http") || href.startsWith("mailto:");
-  const classes = cn(
-    "group relative inline-block text-fg transition-colors hover:text-accent",
-    className,
-  );
-  const inner = (
-    <>
-      {children}
-      <span className="absolute -bottom-0.5 left-0 h-px w-full origin-right scale-x-0 bg-accent transition-transform duration-300 ease-out group-hover:origin-left group-hover:scale-x-100" />
-    </>
-  );
-
-  if (isExternal) {
-    return (
-      <a href={href} target="_blank" rel="noreferrer noopener" className={classes}>
-        {inner}
-      </a>
-    );
-  }
-  return (
-    <Link href={href} className={classes}>
-      {inner}
-    </Link>
   );
 }

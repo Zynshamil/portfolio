@@ -1,6 +1,5 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { useTheme } from "./theme-provider";
 
 /**
@@ -10,7 +9,7 @@ import { useTheme } from "./theme-provider";
  * `data-theme` attribute on <html>. That keeps the markup identical on the
  * server and the client — no hydration mismatch, and no icon flip after mount.
  */
-export function ThemeToggle({ className }: { className?: string }) {
+export function ThemeToggle() {
   const { toggleTheme } = useTheme();
 
   return (
@@ -19,10 +18,7 @@ export function ThemeToggle({ className }: { className?: string }) {
       onClick={toggleTheme}
       aria-label="Switch between light and dark theme"
       title="Switch theme"
-      className={cn(
-        "relative grid h-9 w-9 place-items-center rounded-full border border-line-strong text-fg transition-colors duration-300 hover:border-fg/40 hover:bg-fg/[0.06]",
-        className,
-      )}
+      className="relative grid h-9 w-9 place-items-center rounded-full border border-line-strong text-fg transition-colors duration-300 hover:border-fg/40 hover:bg-fg/[0.06]"
     >
       {/* Sun — shown in dark mode, where the button takes you to light. */}
       <svg

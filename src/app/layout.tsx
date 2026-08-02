@@ -3,7 +3,6 @@ import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import { site, hero } from "@/content/site";
 import { SmoothScroll } from "@/components/ui/smooth-scroll";
 import { Nav } from "@/components/ui/nav";
-import { Footer } from "@/components/ui/footer";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { IntroProvider } from "@/components/ui/intro";
 import { themeInitScript } from "@/lib/theme";
@@ -93,7 +92,6 @@ export default function RootLayout({
             <div className="grain" aria-hidden />
             <Nav />
             <main id="main">{children}</main>
-            <Footer />
           </IntroProvider>
         </ThemeProvider>
       </body>

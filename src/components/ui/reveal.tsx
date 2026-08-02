@@ -1,40 +1,9 @@
 "use client";
 
 import { motion, useReducedMotion, type Variants } from "motion/react";
-import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
-
-/** Fades a block up as it enters the viewport, once. */
-export function Reveal({
-  children,
-  delay = 0,
-  className,
-  as = "div",
-}: {
-  children: ReactNode;
-  delay?: number;
-  className?: string;
-  as?: "div" | "section" | "li" | "article" | "span";
-}) {
-  const reduced = useReducedMotion();
-  const Component = motion[as];
-
-  if (reduced) return <Component className={className}>{children}</Component>;
-
-  return (
-    <Component
-      className={className}
-      initial={{ opacity: 0, y: 26 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.75, delay, ease: EASE }}
-    >
-      {children}
-    </Component>
-  );
-}
 
 const wordChild: Variants = {
   hidden: { y: "105%" },

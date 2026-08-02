@@ -13,7 +13,6 @@
   color-scheme: dark;
 
   --bg: #08080a;
-  --bg-elevated: #0e0e12;
   --line: #1c1c22;
   --line-strong: #2a2a33;
 
@@ -32,8 +31,6 @@
   --glow-accent: rgba(204, 255, 51, 0.16);
   --glow-indigo: rgba(63, 74, 190, 0.14);
   --glow-halo: rgba(120, 140, 255, 0.12);
-
-  --radius: 14px;
   --page-x: 1.5rem;
   --max-w: 78rem;
 }
@@ -42,7 +39,6 @@
   color-scheme: light;
 
   --bg: #faf9f6;
-  --bg-elevated: #ffffff;
   --line: #e6e3db;
   --line-strong: #d2cec2;
 
@@ -68,7 +64,6 @@
     color-scheme: light;
 
     --bg: #faf9f6;
-    --bg-elevated: #ffffff;
     --line: #e6e3db;
     --line-strong: #d2cec2;
 
@@ -90,42 +85,16 @@
 
 @theme inline {
   --color-bg: var(--bg);
-  --color-elevated: var(--bg-elevated);
   --color-line: var(--line);
   --color-line-strong: var(--line-strong);
   --color-fg: var(--fg);
   --color-muted: var(--fg-muted);
-  --color-subtle: var(--fg-subtle);
   --color-accent: var(--accent);
   --color-accent-ink: var(--accent-ink);
 
   --font-sans: var(--font-sans-var), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-mono-var), ui-monospace, SFMono-Regular, monospace;
   --font-display: var(--font-display-var), ui-serif, Georgia, serif;
-
-  --radius-card: var(--radius);
-
-  --animate-marquee: marquee 42s linear infinite;
-  --animate-drift: drift 9s ease-in-out infinite;
-}
-
-@keyframes marquee {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-  to {
-    transform: translate3d(-50%, 0, 0);
-  }
-}
-
-@keyframes drift {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
 }
 
 /* ------------------------------------------------------------------ *
@@ -207,25 +176,6 @@ html.theme-switching *::after {
   }
 }
 
-/* Project cover artwork is generated from bright per-project accents that go
-   pale on paper — deepen them rather than shipping a second palette per project. */
-[data-theme="light"] .cover-grid {
-  opacity: 0.22;
-  filter: brightness(0.7) saturate(1.4);
-}
-[data-theme="light"] .cover-tag {
-  filter: brightness(0.62) saturate(1.5);
-}
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme]) .cover-grid {
-    opacity: 0.22;
-    filter: brightness(0.7) saturate(1.4);
-  }
-  :root:not([data-theme]) .cover-tag {
-    filter: brightness(0.62) saturate(1.5);
-  }
-}
-
 /* ------------------------------------------------------------------ *
  * Intro curtain
  *
@@ -289,13 +239,6 @@ html.lenis body {
   letter-spacing: -0.03em;
   font-weight: 500;
   text-transform: uppercase;
-}
-
-@utility text-title {
-  font-size: clamp(2rem, 5vw, 3.75rem);
-  line-height: 1.02;
-  letter-spacing: -0.03em;
-  font-weight: 500;
 }
 
 @utility text-lead {
