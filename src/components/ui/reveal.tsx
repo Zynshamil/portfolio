@@ -5,8 +5,13 @@ import { cn } from "@/lib/utils";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
+/**
+ * The park position is a percentage of the word's own box, and headline type is
+ * set at `line-height: 0.78` — so 105% is shorter than the mask, which also has
+ * to cover its descender padding. 125% clears the tallest caps at every size.
+ */
 const wordChild: Variants = {
-  hidden: { y: "105%" },
+  hidden: { y: "125%" },
   visible: { y: 0, transition: { duration: 0.85, ease: EASE } },
 };
 

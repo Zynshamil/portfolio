@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
+import { Archivo } from "next/font/google";
 import { site, hero } from "@/content/site";
 import { SmoothScroll } from "@/components/ui/smooth-scroll";
 import { Nav } from "@/components/ui/nav";
@@ -9,13 +9,17 @@ import { themeInitScript } from "@/lib/theme";
 import { introInitScript } from "@/lib/intro";
 import "./globals.css";
 
-const sans = Geist({ variable: "--font-sans-var", subsets: ["latin"] });
-const mono = Geist_Mono({ variable: "--font-mono-var", subsets: ["latin"] });
-const display = Instrument_Serif({
-  variable: "--font-display-var",
+/**
+ * One family does the whole site, the way a campaign does it: the poster, the
+ * yard sign and the fine print are all the same voice, just pushed to different
+ * extremes. Archivo is a grotesque cut for exactly that — its `wdth` axis is
+ * loaded so the wordmark and headlines can be widened into painted signage
+ * instead of sitting at the polite default width.
+ */
+const archivo = Archivo({
+  variable: "--font-sans-var",
   subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
+  axes: ["wdth"],
 });
 
 const title = `${site.name} — ${site.role}`;
@@ -61,8 +65,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#faf9f6" },
-    { media: "(prefers-color-scheme: dark)", color: "#08080a" },
+    { media: "(prefers-color-scheme: light)", color: "#fff7df" },
+    { media: "(prefers-color-scheme: dark)", color: "#153d8a" },
   ],
   colorScheme: "light dark",
 };
@@ -73,7 +77,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${sans.variable} ${mono.variable} ${display.variable} antialiased`}
+      className={`${archivo.variable} antialiased`}
       suppressHydrationWarning
     >
       <body>

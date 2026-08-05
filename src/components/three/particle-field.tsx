@@ -11,6 +11,7 @@ type Props = {
   animate: boolean;
   pointer: React.RefObject<{ x: number; y: number }>;
   theme: ResolvedTheme;
+  variant?: "hero" | "intro";
 };
 
 /** Frozen clock value used for the still frame when motion is reduced. */
@@ -37,23 +38,37 @@ const PALETTES: Record<
   }
 > = {
   dark: {
-    low: "#232a55",
-    high: "#ccff33",
-    sparkle: 0.8,
+    low: "#242832",
+    high: "#6f93ff",
+    sparkle: 0.3,
     blending: THREE.AdditiveBlending,
-    opacity: 0.014,
+    opacity: 0.026,
   },
   light: {
-    low: "#8f8d80",
-    high: "#44700a",
-    sparkle: -0.18,
+    low: "#9ca8bb",
+    high: "#2457d6",
+    sparkle: -0.12,
     blending: THREE.NormalBlending,
-    opacity: 0.01,
+    opacity: 0.018,
   },
 };
 
-export function ParticleField({ count, animate, pointer, theme }: Props) {
-  const palette = PALETTES[theme];
+const INTRO_PALETTE = {
+  low: "#2855a0",
+  high: "#ffd447",
+  sparkle: 0.38,
+  blending: THREE.AdditiveBlending,
+  opacity: 0.034,
+};
+
+export function ParticleField({
+  count,
+  animate,
+  pointer,
+  theme,
+  variant = "hero",
+}: Props) {
+  const palette = variant === "intro" ? INTRO_PALETTE : PALETTES[theme];
   const groupRef = useRef<THREE.Group>(null);
   const pointsRef = useRef<THREE.Points>(null);
   const materialRef = useRef<THREE.ShaderMaterial>(null);
@@ -106,11 +121,11 @@ export function ParticleField({ count, animate, pointer, theme }: Props) {
   const seedUniforms = useMemo(
     () => ({
       uTime: { value: animate ? 0 : STILL_TIME },
-      uSize: { value: 46 },
+      uSize: { value: 54 },
       uPixelRatio: { value: 1 },
       uAmplitude: { value: 0.42 },
       uPointer: { value: new THREE.Vector3(999, 999, 999) },
-      uPointerStrength: { value: 0.34 },
+      uPointerStrength: { value: 0.48 },
       uColorLow: { value: new THREE.Color(palette.low) },
       uColorHigh: { value: new THREE.Color(palette.high) },
       uSparkle: { value: palette.sparkle },

@@ -11,12 +11,13 @@ import {
 } from "react";
 import { stagger, useAnimate, useReducedMotion } from "motion/react";
 import { site } from "@/content/site";
+import { IntroCanvas } from "@/components/three/intro-canvas";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 /** Slow-in, slow-out — the name feels carried to the corner, not thrown. */
 const TRAVEL_EASE = [0.76, 0, 0.24, 1] as const;
 
-const HOLD_MS = 420;
+const HOLD_MS = 700;
 /** If anything above throws or stalls, the page must still become usable. */
 const FAILSAFE_MS = 6000;
 
@@ -108,7 +109,7 @@ function IntroCurtain({ onDone }: { onDone: () => void }) {
       const from = name.getBoundingClientRect();
       const to = brand?.getBoundingClientRect();
 
-      animate(panel, { opacity: 0 }, { duration: 0.7, delay: 0.4, ease: EASE });
+      animate(panel, { opacity: 0 }, { duration: 0.6, delay: 0.3, ease: EASE });
 
       if (!to?.width) {
         // No logo to land on — bow out rather than leave the name floating.
@@ -121,9 +122,9 @@ function IntroCurtain({ onDone }: { onDone: () => void }) {
       }
 
       // The white is leaving, so the ink has to become the page's own colour.
-      animate(name, { color: "var(--fg)" }, { duration: 0.5, delay: 0.5 });
+      animate(name, { color: "var(--fg)" }, { duration: 0.45, delay: 0.35 });
       if (dot)
-        animate(dot, { color: "var(--accent)" }, { duration: 0.5, delay: 0.5 });
+        animate(dot, { color: "var(--accent)" }, { duration: 0.45, delay: 0.35 });
 
       await animate(
         name,
@@ -132,7 +133,7 @@ function IntroCurtain({ onDone }: { onDone: () => void }) {
           y: to.top - from.top,
           scale: to.width / from.width,
         },
-        { duration: 1.15, ease: TRAVEL_EASE },
+        { duration: 1.05, ease: TRAVEL_EASE },
       );
 
       finish();
@@ -158,14 +159,26 @@ function IntroCurtain({ onDone }: { onDone: () => void }) {
       aria-hidden
       className="pointer-events-none fixed inset-0 z-100"
     >
-      <div data-intro-panel className="absolute inset-0 bg-white" />
+      <div data-intro-panel className="absolute inset-0 overflow-hidden bg-[#153d8a]">
+        <div className="absolute -top-[28vmin] -right-[20vmin] h-[72vmin] w-[72vmin] rounded-full border-[min(1.25vw,14px)] border-[#ffd447]/85" />
+        <div className="absolute top-[14%] right-[11%] h-[15vmin] w-[15vmin] rounded-full bg-[#ed5d32]" />
+        <p className="absolute top-7 left-7 text-[10px] font-extrabold tracking-[0.18em] text-[#ffd447] uppercase sm:top-10 sm:left-10">
+          Full-stack developer / India + worldwide
+        </p>
+        <p className="absolute right-7 bottom-7 text-right text-[10px] font-extrabold tracking-[0.18em] text-[#ffd447] uppercase sm:right-10 sm:bottom-10">
+          Websites · apps · systems
+        </p>
+      </div>
+      <div className="absolute inset-0 opacity-90 mix-blend-screen">
+        <IntroCanvas />
+      </div>
 
       <div className="absolute inset-0 grid place-items-center">
         <span
           data-intro-name
           // Transforms measure from the corner the name is flying to, which is
           // what makes the FLIP arithmetic above a straight subtraction.
-          className="inline-block origin-top-left font-mono leading-none tracking-tight whitespace-nowrap text-[#0b0b0d] will-change-transform"
+          className="wordmark intro-sign inline-block origin-top-left whitespace-nowrap will-change-transform"
           style={{ fontSize: "clamp(2.25rem, 11vw, 7rem)" }}
         >
           {letters.map((letter, index) => (
@@ -190,12 +203,13 @@ function IntroCurtain({ onDone }: { onDone: () => void }) {
  */
 function Masked({ children, dot }: { children: ReactNode; dot?: boolean }) {
   return (
-    // Padding keeps the descender of a "y" clear of the mask's teeth.
-    <span className="inline-block overflow-hidden pb-[0.14em] align-bottom">
+    // The wordmark is all caps, so there are no descenders to clear — just
+    // enough slack that the mask's edge never shaves the baseline.
+    <span className="inline-block overflow-hidden pb-[0.04em] align-bottom">
       <span
         data-intro-char
         data-intro-dot={dot ? "" : undefined}
-        className={dot ? "inline-block text-[#44700a]" : "inline-block"}
+        className={dot ? "inline-block text-[#ed5d32]" : "inline-block"}
         style={{ transform: "translateY(105%)" }}
       >
         {children}
