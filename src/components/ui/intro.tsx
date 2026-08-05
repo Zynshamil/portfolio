@@ -17,7 +17,7 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 /** Slow-in, slow-out — the name feels carried to the corner, not thrown. */
 const TRAVEL_EASE = [0.76, 0, 0.24, 1] as const;
 
-const HOLD_MS = 1100;
+const HOLD_MS = 700;
 /** If anything above throws or stalls, the page must still become usable. */
 const FAILSAFE_MS = 6000;
 
@@ -109,7 +109,7 @@ function IntroCurtain({ onDone }: { onDone: () => void }) {
       const from = name.getBoundingClientRect();
       const to = brand?.getBoundingClientRect();
 
-      animate(panel, { opacity: 0 }, { duration: 0.7, delay: 0.4, ease: EASE });
+      animate(panel, { opacity: 0 }, { duration: 0.6, delay: 0.3, ease: EASE });
 
       if (!to?.width) {
         // No logo to land on — bow out rather than leave the name floating.
@@ -122,9 +122,9 @@ function IntroCurtain({ onDone }: { onDone: () => void }) {
       }
 
       // The white is leaving, so the ink has to become the page's own colour.
-      animate(name, { color: "var(--fg)" }, { duration: 0.5, delay: 0.5 });
+      animate(name, { color: "var(--fg)" }, { duration: 0.45, delay: 0.35 });
       if (dot)
-        animate(dot, { color: "var(--accent)" }, { duration: 0.5, delay: 0.5 });
+        animate(dot, { color: "var(--accent)" }, { duration: 0.45, delay: 0.35 });
 
       await animate(
         name,
@@ -133,7 +133,7 @@ function IntroCurtain({ onDone }: { onDone: () => void }) {
           y: to.top - from.top,
           scale: to.width / from.width,
         },
-        { duration: 1.15, ease: TRAVEL_EASE },
+        { duration: 1.05, ease: TRAVEL_EASE },
       );
 
       finish();

@@ -119,7 +119,10 @@ body {
   background: var(--bg);
   color: var(--fg);
   font-family: var(--font-sans);
-  overflow-x: hidden;
+  /* `clip`, not `hidden`: hidden turns the body into a scroll container, which
+     silently disables every `position: sticky` inside it — including the
+     pinned hero stage. `clip` contains the same overflow without doing that. */
+  overflow-x: clip;
   font-synthesis-weight: none;
   text-rendering: optimizeLegibility;
 }
@@ -197,6 +200,14 @@ html[data-intro="running"] #intro {
   display: block;
 }
 
+/* The pinned stage plays the same handoff further down the page: it writes the
+   name across the card and carries it back up here, so the real logo steps
+   aside for the duration. Driven as a custom property rather than as an inline
+   style, so the intro's rule below still wins outright during the curtain. */
+[data-brand] {
+  opacity: var(--brand-visible, 1);
+}
+
 /* The name is about to fly to this exact spot; the real logo waits its turn. */
 html[data-intro="running"] [data-brand] {
   opacity: 0;
@@ -245,7 +256,7 @@ html.lenis body {
 /* Fluid display type — scales without breakpoint jumps */
 @utility text-display {
   font-size: clamp(2.5rem, 8vw, 6rem);
-  line-height: 0.86;
+  line-height:1;
   letter-spacing: -0.025em;
   font-weight: 800;
   font-stretch: 108%;
@@ -324,11 +335,14 @@ html.lenis body {
   text-shadow: 0.045em 0.045em 0 var(--offset);
 }
 
-/* The hero's decorative field: a very quiet sunburst plus two sign-paint
-   borders. It has no text content and is hidden from assistive technology. */
+/* The hero's decorative field: a very quiet sunburst over corner shading. It
+   has no text content and is hidden from assistive technology.
+
+   There was a third layer here — a full-height hairline at 70% width — but it
+   lined up with nothing on the page and read as a rendering seam rather than
+   as print detail, so the sunburst carries the texture on its own. */
 @utility poster-field {
   background:
-    linear-gradient(90deg, transparent 0 70%, rgba(255, 212, 71, 0.08) 70% 70.25%, transparent 70.25%),
     repeating-conic-gradient(from -16deg at 83% 51%, rgba(255, 212, 71, 0.13) 0deg 4deg, transparent 4deg 14deg),
     linear-gradient(115deg, rgba(11, 42, 108, 0.22), transparent 56%);
 }
@@ -346,6 +360,38 @@ html.lenis body {
   text-transform: uppercase;
 }
 
+
+/* ---- Marquee ------------------------------------------------------ *
+ * The track carries the phrase twice, end to end, so shifting it exactly half
+ * its own width lands the second copy where the first started and the loop is
+ * seamless. Reduced motion collapses the duration globally, which parks the
+ * track on that end state — still a full band of type, just not travelling.
+ * ------------------------------------------------------------------- */
+@keyframes marquee-x {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@utility marquee-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: marquee-x 30s linear infinite;
+}
+
+/* The same track running the other way. Paired with the one above it, the two
+   lines shear past each other instead of reading as one thick block sliding
+   sideways — and the odd duration keeps them from ever syncing up. */
+@utility marquee-track-reverse {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: marquee-x 37s linear infinite reverse;
+}
 
 /* Film grain over the whole page — hides gradient banding behind the canvas */
 @utility grain {
