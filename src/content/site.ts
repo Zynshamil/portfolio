@@ -53,7 +53,8 @@ export const stage = {
   signature: "Shamil Babu",
   /** Repeated end to end on the two lines running behind the card. Keep it
    *  short — it is set very large, and the card covers the middle of it. */
-  marquee: "Make web less boring",
+  // marquee: "Make web less boring",
+  marquee: "",
 };
 
 export const collaborators = [

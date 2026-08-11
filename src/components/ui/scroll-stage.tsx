@@ -280,10 +280,10 @@ export function ScrollStage({ backdrop, hero, children }: Props) {
         </div>
         <section className="relative isolate overflow-hidden py-16">
           <div className="flex justify-center px-6">
-            <Wordmark />
+            {/* <Wordmark /> */}
           </div>
           <div className="mt-10">
-            <Marquee />
+            {/* <Marquee /> */}
           </div>
         </section>
         {children}
@@ -308,7 +308,7 @@ export function ScrollStage({ backdrop, hero, children }: Props) {
                 every line, which is what makes the two read as one plane. */}
             <div className="absolute inset-x-0 top-1/2 -translate-y-1/2">
               <motion.div style={{ opacity: marqueeOpacity, y: marqueeY }}>
-                <Marquee />
+                {/* <Marquee /> */}
               </motion.div>
             </div>
 
@@ -374,7 +374,7 @@ export function ScrollStage({ backdrop, hero, children }: Props) {
               className="absolute inset-x-0 top-[14svh] z-20 flex justify-center px-6"
               style={{ opacity: wordmarkOpacity, y: wordmarkY }}
             >
-              <Wordmark />
+              {/* <Wordmark /> */}
             </motion.div>
           </motion.div>
         </div>
