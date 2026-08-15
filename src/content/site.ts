@@ -71,14 +71,40 @@ export const hero = {
  * handled by `alternateNames` in the structured data, where a search engine
  * reads them and a visitor never has to — nobody should land here and be told
  * how their host spells his own name.
+ *
+ * The prose stops at the stack, deliberately. The domains below used to be a
+ * third clause on the end of it, which is exactly the sentence a client stops
+ * reading — so they are `builds` instead, scanned in a second rather than read.
+ * The search engine gets the same words either way.
+ *
+ * They are past tense on purpose: this is the list of systems already shipped,
+ * not a menu of things on offer.
  */
 export const about = {
   eyebrow: "About",
   heading: "Who you're working with",
   paragraphs: [
-    "I'm Zyn Shamil, a freelance full-stack developer building fast, unusual web experiences for teams worldwide, from Kerala, India.",
-    "I work the whole stack: React and Next.js at the front, Node and Python behind it, and the DevOps to get it shipped. Recent work spans WebGL interfaces, retail management systems and financial data platforms.",
+    "I'm Zyn Shamil, a freelance full-stack developer building fast, unusual web experiences for teams worldwide, from Calicut, India.",
+    "React and Next.js at the front. Node.js, Express and NestJS behind it. AWS and the DevOps to get it shipped.",
   ],
+  builds: {
+    label: "What I've built",
+    items: [
+      "E-commerce",
+      "Recruitment management (RMS)",
+      "Healthcare management (HMS)",
+      "Education management (EMS)",
+      "Construction management",
+      "Parking management",
+      "CRM",
+      "ERP & dashboards",
+      "Websites",
+      "Maps & live tracking",
+    ],
+    // The list is evidence, not a menu — this line says so, so nobody with an
+    // idea that isn't on it decides they are in the wrong place.
+    note: "Not a fixed menu. If it runs on the web, I'm open to building it — end to end.",
+  },
 };
 
 export const collaborators = [
