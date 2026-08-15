@@ -56,7 +56,11 @@ export function Hero() {
   const supporting = { opacity: "var(--hero-copy, 1)" };
 
   return (
-    <section className="relative flex min-h-svh items-center overflow-hidden px-0 py-24 md:py-28">
+    // The whole section is the poster voice, not just the headline — the
+    // availability tag, the standfirst and the CTA are the fine print around it
+    // and belong to the same piece of print. Set once here and inherited, which
+    // is also what `text-hero` and its `ch` measure are cut to.
+    <section className="font-secondary relative flex min-h-svh items-center overflow-hidden px-0 py-24 md:py-28">
       <div className="page relative z-10 flex flex-col items-center text-center">
         {site.available && (
           <div style={supporting} className="mb-8">

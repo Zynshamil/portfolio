@@ -157,7 +157,10 @@ function IntroCurtain({ onDone }: { onDone: () => void }) {
       id="intro"
       ref={scope}
       aria-hidden
-      className="pointer-events-none fixed inset-0 z-100"
+      // The curtain is the poster voice end to end — the name that flies onto
+      // the nav wordmark and the fine print in the corners — so the family is
+      // set once here and inherited rather than repeated on each child.
+      className="font-secondary pointer-events-none fixed inset-0 z-100"
     >
       <div data-intro-panel className="absolute inset-0 overflow-hidden bg-[#153d8a]">
         <div className="absolute -top-[28vmin] -right-[20vmin] h-[72vmin] w-[72vmin] rounded-full border-[min(1.25vw,14px)] border-[#ffd447]/85" />

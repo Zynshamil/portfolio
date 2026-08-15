@@ -33,7 +33,7 @@ export function About() {
       <div className="page">
         <div className="border-b-2 border-line-strong pb-7">
           <p className="eyebrow">{about.eyebrow}</p>
-          <h2 id="about-title" className="my-3 text-display">
+          <h2 id="about-title" className="my-3 text-display font-extrabold font-secondary lg:max-w-2/3 ">
             {about.heading}
           </h2>
         </div>

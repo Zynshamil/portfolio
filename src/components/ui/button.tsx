@@ -6,6 +6,10 @@ import { motion, useMotionValue, useSpring, useReducedMotion } from "motion/reac
 
 const MotionLink = motion.create(Link);
 
+// The 800 is drawn for the hero, where the surrounding section sets the
+// secondary family and the weight is a real face. The 404 uses the same button
+// under the primary family, which stops at 700 and renders it as Bold — same
+// pixels either way, so the button keeps one declaration rather than two.
 const styles =
   "group relative inline-flex items-center justify-center gap-2 rounded-sm bg-accent px-7 py-3.5 text-sm font-extrabold tracking-[0.08em] text-accent-ink uppercase shadow-[4px_4px_0_var(--offset)] transition-[background-color,box-shadow] duration-300 will-change-transform hover:bg-fg hover:shadow-[2px_2px_0_var(--offset)]";
 

@@ -28,8 +28,13 @@ export function Nav() {
       <nav className="page flex h-16 items-center justify-between md:h-20">
         {/* The intro curtain measures this element and flies its own copy of the
             wordmark onto it, so the two must stay typographically identical —
-            hence the shared `wordmark` utility rather than loose classes. */}
-        <Link href="/" data-brand className="wordmark text-sm text-fg">
+            hence the shared `wordmark` utility rather than loose classes, and
+            the matching `font-secondary` at both ends. */}
+        <Link
+          href="/"
+          data-brand
+          className="font-secondary wordmark text-sm text-fg"
+        >
           {site.brand}
           <span className="text-accent">.</span>
         </Link>
