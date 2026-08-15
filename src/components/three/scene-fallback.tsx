@@ -7,14 +7,14 @@ export function SceneFallback() {
   return (
     <div className="absolute inset-0 overflow-hidden" aria-hidden>
       <div
-        className="absolute top-1/2 left-1/2 h-[75vmin] w-[75vmin] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-70 blur-3xl"
+        className="absolute top-1/2 left-1/2 size-[75vmin] -translate-x-1/2 -translate-y-1/2 rounded-pill opacity-70 blur-3xl"
         style={{
           background:
             "radial-gradient(circle at 50% 50%, var(--glow-accent), var(--glow-indigo) 45%, transparent 70%)",
         }}
       />
       <div
-        className="absolute top-1/3 left-1/2 h-[40vmin] w-[40vmin] -translate-x-1/2 rounded-full opacity-60 blur-2xl"
+        className="absolute top-1/3 left-1/2 size-[40vmin] -translate-x-1/2 rounded-pill opacity-60 blur-2xl"
         style={{
           background:
             "radial-gradient(circle at 50% 50%, var(--glow-halo), transparent 70%)",

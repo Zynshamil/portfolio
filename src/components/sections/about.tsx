@@ -27,13 +27,14 @@ export function About() {
       // The first thing to arrive after the pinned stage releases. Deliberately
       // no rule along the top edge: the stage fades its field into the page
       // colour on the way out, and any line here would put a hard seam exactly
-      // where the two are supposed to be indistinguishable.
-      className="relative border-b border-b-line py-20 sm:py-28"
+      // where the two are supposed to be indistinguishable — `section-shell`
+      // rules the bottom edge only, for that reason.
+      className="section-shell"
     >
       <div className="page">
-        <div className="border-b-2 border-line-strong pb-7">
+        <div className="section-head">
           <p className="eyebrow">{about.eyebrow}</p>
-          <h2 id="about-title" className="my-3 text-display font-extrabold font-secondary lg:max-w-2/3 ">
+          <h2 id="about-title" className="my-3 text-display lg:max-w-2/3">
             {about.heading}
           </h2>
         </div>
@@ -62,9 +63,9 @@ export function About() {
               {about.builds.items.map((item) => (
                 <li
                   key={item}
-                  className="inline-flex items-center gap-2 rounded-full border border-line bg-fg/3 px-4 py-2 text-sm font-semibold tracking-[-0.01em] text-fg/85 transition-colors duration-300 hover:border-accent/45 hover:text-fg"
+                  className="chip text-fg/85 transition-colors hover:border-accent/45 hover:text-fg"
                 >
-                  <span aria-hidden className="size-1.5 rounded-full bg-accent" />
+                  <span aria-hidden className="size-1.5 rounded-pill bg-accent" />
                   {item}
                 </li>
               ))}
@@ -85,12 +86,12 @@ export function About() {
                   href={url}
                   target="_blank"
                   rel="me noreferrer noopener"
-                  className="group inline-flex items-center gap-2 label text-muted transition-colors hover:text-accent"
+                  className="group label inline-flex items-center gap-2 text-muted transition-colors hover:text-accent"
                 >
                   {profileName(url)}
                   <span
                     aria-hidden
-                    className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                    className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                   >
                     ↗
                   </span>

@@ -457,6 +457,24 @@ html.lenis body {
   padding-inline: var(--page-x);
 }
 
+/* The vertical rhythm and closing rule every content section shares. One edit
+   here re-paces the whole page; a new section gets it by naming the class. */
+@utility section-shell {
+  position: relative;
+  border-bottom: 1px solid var(--line);
+  padding-block: var(--section-y);
+
+  @media (width >= 40rem) {
+    padding-block: var(--section-y-lg);
+  }
+}
+
+/* The heavier rule that closes a section's eyebrow-and-heading block. */
+@utility section-head {
+  border-bottom: 2px solid var(--line-strong);
+  padding-bottom: 1.75rem;
+}
+
 /* ---- Poster type -------------------------------------------------- *
  * Everything here is one idea: caps set at maximum weight, tracked in and
  * leaded so tight the lines lock into a single printed slab. That density is
@@ -569,6 +587,22 @@ html.lenis body {
  * governed from this file alone.
  * ------------------------------------------------------------------- */
 
+/* The plate a card sits on. Used by the collaborator links, and by anything
+   later that needs to float over the field. */
+@utility card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+  backdrop-filter: blur(4px);
+  padding: 1.5rem;
+
+  @media (width >= 40rem) {
+    padding: 1.75rem;
+  }
+}
+
 /* The floating menu panel. Heavier rule and blur than a card, because it sits
    above the page rather than in it. */
 @utility panel {
@@ -589,6 +623,75 @@ html.lenis body {
   border-radius: var(--radius-chip);
   padding: 0.5rem 0.625rem;
   text-align: left;
+}
+
+/* A soft pill of metadata — the domains in About. */
+@utility chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* A hairline-ruled tag: the availability badge in the nav and over the hero.
+   Rules top and bottom only, so it reads as a stamped line of fine print
+   rather than as a button.
+
+   Deliberately sets no `display` — the nav's copy is `hidden sm:inline-flex`,
+   and a display here would race those in the cascade. Call sites bring it. */
+@utility rule-tag {
+  align-items: center;
+  gap: 0.625rem;
+  border-block: 1px solid var(--line-strong);
+  padding: 0.5rem 0.75rem;
+}
+
+/* The square plate a third-party logo is dropped onto. The mark fills it edge
+   to edge, so logos that carry their own opaque background get clipped by the
+   corner radius instead of sitting as a hard square inside a ring of chip
+   colour; the ones with real transparency let the plate through. */
+@utility logo-plate {
+  display: flex;
+  flex: none;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-chip);
+  background: var(--logo-plate);
+}
+
+/* The small circled glyph that marks an outbound link. */
+@utility icon-badge {
+  display: grid;
+  flex: none;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  color: var(--accent);
+}
+
+/* The CTA: accent fill with an offset block behind it, printed rather than
+   drop-shadowed. Both the resting and pressed offsets are tokens, so the whole
+   button moves together. */
+@utility btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: var(--radius-btn);
+  background: var(--accent);
+  color: var(--accent-ink);
+  padding: 0.875rem 1.75rem;
+  font-size: 0.875rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: var(--elevation-print);
 }
 
 /* ---- Effects ------------------------------------------------------- */

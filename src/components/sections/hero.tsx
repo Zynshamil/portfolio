@@ -3,6 +3,7 @@
 import { motion, useReducedMotion } from "motion/react";
 import { HeroCanvas } from "@/components/three/hero-canvas";
 import { CtaButton } from "@/components/ui/button";
+import { PulseDot } from "@/components/ui/pulse-dot";
 import { SplitWords } from "@/components/ui/reveal";
 import { useIntroDone } from "@/components/ui/intro";
 import { hero, site } from "@/content/site";
@@ -64,17 +65,9 @@ export function Hero() {
       <div className="page relative z-10 flex flex-col items-center text-center">
         {site.available && (
           <div style={supporting} className="mb-8">
-            <motion.div
-              {...fade(0.1)}
-              className="inline-flex items-center gap-2.5 border-y border-line-strong bg-bg/25 px-3 py-2"
-            >
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-70" />
-                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
-              </span>
-              <span className="label text-muted">
-                {site.availableText}
-              </span>
+            <motion.div {...fade(0.1)} className="rule-tag inline-flex bg-bg/25">
+              <PulseDot />
+              <span className="label text-muted">{site.availableText}</span>
             </motion.div>
           </div>
         )}

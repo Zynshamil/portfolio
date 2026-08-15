@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { site } from "@/content/site";
 import { cn } from "@/lib/utils";
+import { PulseDot } from "./pulse-dot";
 import { ThemeMenu } from "./theme-menu";
 
 export function Nav() {
@@ -19,7 +20,7 @@ export function Nav() {
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-all duration-500",
+        "fixed inset-x-0 top-0 z-50 transition-all duration-(--motion-slow)",
         scrolled
           ? "border-b border-line bg-bg/70 backdrop-blur-xl"
           : "border-b border-transparent",
@@ -41,14 +42,12 @@ export function Nav() {
 
         <div className="flex items-center gap-3 sm:gap-4">
           {site.available && (
-            <a href={`mailto:${site.email}`} className="hidden items-center gap-2 border-y border-line-strong px-3 py-1.5 transition-colors hover:bg-fg/10 sm:inline-flex">
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-70" />
-                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
-              </span>
-              <span className="label text-muted">
-                Let&apos;s talk
-              </span>
+            <a
+              href={`mailto:${site.email}`}
+              className="rule-tag hidden transition-colors hover:bg-surface-hover sm:inline-flex"
+            >
+              <PulseDot />
+              <span className="label text-muted">Let&apos;s talk</span>
             </a>
           )}
 
