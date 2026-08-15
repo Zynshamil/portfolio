@@ -81,20 +81,6 @@ export const about = {
   ],
 };
 
-/**
- * The pinned stage the hero folds into on the way down the page. Everything
- * here is placeholder-friendly — swap the wording freely, the layout is driven
- * by the viewport rather than by the length of these strings.
- */
-export const stage = {
-  /** Set small above the card, as the caption to the drawn signature. */
-  signature: "Shamil Babu",
-  /** Repeated end to end on the two lines running behind the card. Keep it
-   *  short — it is set very large, and the card covers the middle of it. */
-  // marquee: "Make web less boring",
-  marquee: "",
-};
-
 export const collaborators = [
   {
     name: "GJ Global IT Ventures",
