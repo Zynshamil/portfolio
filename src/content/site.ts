@@ -76,8 +76,8 @@ export const about = {
   eyebrow: "About",
   heading: "Who you're working with",
   paragraphs: [
-    "I'm Zyn Shamil, a freelance full-stack developer building fast, unusual web experiences for teams worldwide, from Kerala, India.",
-    "I work the whole stack: React and Next.js at the front, Node and Python behind it, and the DevOps to get it shipped. Recent work spans WebGL interfaces, retail management systems and financial data platforms.",
+    "I'm Zyn Shamil, a freelance full-stack developer building fast, unusual web experiences for teams worldwide, from Calicut, India.",
+    "React and Next.js at the front. Node.js, Express and NestJS behind it. AWS and the DevOps to get it shipped.",
   ],
 };
 
