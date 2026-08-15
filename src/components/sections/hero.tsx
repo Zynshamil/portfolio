@@ -12,11 +12,10 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 /**
  * The hero's texture — the particle field and the poster gradients over it.
  *
- * Deliberately separate from the copy: the pinned stage folds the copy down
- * into a card but leaves this running full-screen and untouched behind it, so
- * there is only ever one field on the page and it never moves. Needs a
- * positioned ancestor to fill; both the stage and any standalone use provide
- * one.
+ * Deliberately separate from the copy: the pinned stage shrinks the copy away
+ * but leaves this running full-screen and untouched behind it, so there is only
+ * ever one field on the page and it never moves. Needs a positioned ancestor to
+ * fill; both the stage and any standalone use provide one.
  */
 export function HeroBackdrop() {
   return (
@@ -46,8 +45,8 @@ export function Hero() {
     transition: { duration: 0.8, delay, ease: EASE },
   });
 
-  // The stage drives this as it folds: everything around the headline goes,
-  // because at card size it is a smudge. Unset everywhere else, so the
+  // The stage drives this as it shrinks: everything around the headline goes,
+  // because at that size it is a smudge. Unset everywhere else, so the
   // fallback leaves the hero exactly as it was.
   //
   // It sits on wrappers rather than on the animated elements themselves — the
@@ -79,7 +78,7 @@ export function Hero() {
         {/* One block per line, so the copy breaks where it was written rather
             than wherever the container happens to run out.
 
-            `data-hero-focus` marks what the stage centres inside the card: it
+            `data-hero-focus` marks what the stage centres as it shrinks: it
             measures this element's offset and cancels it out, so the headline
             lands dead centre no matter what is stacked above or below it. */}
         <h1
