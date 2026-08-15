@@ -71,15 +71,21 @@ export function Collaborators() {
 
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex items-center gap-4">
-                    <span className="flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-line bg-fg/[0.04] ring-1 ring-fg/5 transition-colors duration-300 group-hover:border-accent/40">
+                    {/* The mark fills the chip edge to edge. The logos that
+                        carry their own opaque background (a grey square, a
+                        white one) therefore reach the rounded corners and get
+                        clipped by them, instead of sitting as a hard square
+                        inside a ring of chip colour. The ones with real
+                        transparency simply let the plate through. */}
+                    <span className="flex size-12 shrink-0 overflow-hidden rounded-xl border border-line bg-logo-plate transition-colors duration-300 group-hover:border-accent/40">
                       <Image
                         src={collaborator.icon}
                         alt=""
-                        width={40}
-                        height={40}
+                        width={48}
+                        height={48}
                         unoptimized
                         loading="lazy"
-                        className="max-h-full max-w-full object-contain mix-blend-multiply dark:mix-blend-normal"
+                        className="size-full object-contain"
                       />
                     </span>
                     <span className="text-xl font-extrabold tracking-[-0.035em] text-fg sm:text-2xl">

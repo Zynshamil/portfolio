@@ -27,6 +27,14 @@
   --accent-ink: #123579;
   --offset: #ed5d32;
 
+  /* Third-party logos are fixed artwork drawn for light backgrounds — several
+     ship with an opaque near-white plate baked into the file. So the chip they
+     sit on is the one surface on the page that does NOT follow --bg: it stays
+     this warm light tone in both themes, which is why it is declared here and
+     never overridden below. Following the theme would multiply the dark marks
+     into the blue page and lose them. */
+  --logo-plate: #fff7df;
+
   /* Film grain sits on a dark page, so it lightens. */
   --grain-blend: overlay;
   --grain-opacity: 0.045;
@@ -97,6 +105,7 @@
   --color-muted: var(--fg-muted);
   --color-accent: var(--accent);
   --color-accent-ink: var(--accent-ink);
+  --color-logo-plate: var(--logo-plate);
 
   /* Deliberately the only family on the page. */
   --font-sans:
