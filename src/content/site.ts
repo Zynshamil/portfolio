@@ -118,7 +118,8 @@ export const collaborators = [
     name: "financial.com AG",
     location: "Munich, Germany",
     url: "https://financial.com/",
-    icon: "https://financial.com/favicon.ico",
+    // Not /favicon.ico — that path 404s here; the real mark is under /media.
+    icon: "https://financial.com/media/favicon.png",
   },
   {
     name: "DigitalWorks Consulting Group",
@@ -142,6 +143,8 @@ export const collaborators = [
     name: "Clunch Developers",
     location: "Bengaluru, India",
     url: "https://clunchdevelopers.com/",
-    icon: "https://clunchdevelopers.com/favicon.ico",
+    // Same story as financial.com. /img/logo.png is the full wordmark, which is
+    // unreadable at 40px, so this uses the standalone mark instead.
+    icon: "https://clunchdevelopers.com/img/favicon.png",
   },
 ] as const;
