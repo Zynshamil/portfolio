@@ -88,7 +88,7 @@ export function Collaborators() {
                         className="size-full object-contain"
                       />
                     </span>
-                    <span className="text-xl font-extrabold tracking-[-0.035em] text-fg sm:text-2xl">
+                    <span className="text-xl font-bold tracking-[-0.035em] text-fg sm:text-2xl">
                       {collaborator.name}
                     </span>
                   </div>

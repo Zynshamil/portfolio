@@ -107,9 +107,23 @@
   --color-accent-ink: var(--accent-ink);
   --color-logo-plate: var(--logo-plate);
 
-  /* Deliberately the only family on the page. */
-  --font-sans:
-    var(--font-sans-var), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* Two families, and the `font-primary` / `font-secondary` utilities that set
+     them. Primary is SF Pro Display and is the default for the whole page —
+     its fallbacks lead with the system UI faces, which on Apple hardware is SF
+     itself, so a visitor who never gets the webfont still reads the page in
+     the typeface it was set in.
+
+     Secondary is Archivo and is the poster voice, spent in exactly three
+     places: the hero section, the nav wordmark and the intro curtain. It is
+     opt-in per element rather than inherited, so it cannot leak into body copy.
+     `text-hero` and `wordmark` are cut to its metrics and to its 900 weight,
+     and go wrong under any other family — see the notes on each. */
+  --font-primary:
+    var(--font-sf-pro), -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-secondary:
+    var(--font-archivo), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-sans: var(--font-primary);
 }
 
 /* ------------------------------------------------------------------ *
@@ -252,6 +266,14 @@ html.lenis body {
  * Everything here is one idea: caps set at maximum weight, tracked in and
  * leaded so tight the lines lock into a single printed slab. That density is
  * the whole effect — loosen the leading and it turns back into a web page.
+ *
+ * The ceiling differs by family, so each utility below is written to the one it
+ * is set in. `text-hero` and `wordmark` are Archivo — a true 900 and a `wdth`
+ * axis, so they get the full painted weight. Everything else is SF Pro Display,
+ * whose heaviest face is Bold: 700 is the maximum there, `font-stretch` does
+ * nothing, and because `font-synthesis-weight: none` is set on the body an 800
+ * would render as that same Bold anyway. A declared weight that lies about what
+ * is on screen is worse than a lower true one, so those stop at 700.
  * ------------------------------------------------------------------- */
 
 /* Fluid display type — scales without breakpoint jumps */
@@ -259,17 +281,16 @@ html.lenis body {
   font-size: clamp(2.5rem, 8vw, 6rem);
   line-height:1;
   letter-spacing: -0.025em;
-  font-weight: 800;
-  font-stretch: 108%;
+  font-weight: 700;
   text-transform: uppercase;
 }
 
-/* Hero headline. The copy is hard-broken into three lines, so the longest one
-   sets the size: "CORPORATE WEBSITES" measures ~11.96em at this weight, and
-   the column is the viewport less 2 × --page-x. That works out to a hard
-   ceiling of ~7.3vw, so 7vw keeps the type flush to the measure — poster-wide
-   — with a little slack left at every width. The rem floor only ever engages
-   below a 314px viewport, which no real device has. */
+/* Hero headline — set in `font-secondary`, and both numbers here are Archivo's.
+   The copy is one string wrapped by the measure below, so the size is set by
+   the longest line that measure produces: "MAKE YOUR WEB" runs 8.7em at this
+   weight and tracking, which the vw figure spans across ~62% of the viewport.
+   That width is where the headline stops reading as large text and starts
+   reading as signage. The rem floor engages under a 500px viewport. */
 @utility text-hero {
   font-size: clamp(2.25rem, 7.2vw, 6.5rem);
   line-height: 0.78;
@@ -278,13 +299,21 @@ html.lenis body {
   text-transform: uppercase;
 }
 
+/* The measure exists to pick the break, not to cap the width: at 16ch (10.7em
+   in Archivo at 900) "MAKE YOUR WEB" fits and "MAKE YOUR WEB LESS" does not,
+   which is the balanced two-line break. `ch` is the width of a zero, so this
+   number belongs to the family as much as to the copy — under SF Pro the same
+   16ch breaks the headline 18 characters against 6, and it would need to come
+   down to 13ch. Re-measure it if either the typeface or the headline changes. */
 @utility text-hero-centred {
   max-width: 16ch;
 }
 
 /* The wordmark, shared by the nav logo and the intro curtain that flies onto
    it. The two are measured against each other at runtime, so any change here
-   has to stay in one utility rather than being spelled out at both ends. */
+   has to stay in one utility rather than being spelled out at both ends — and
+   for the same reason both call sites set `font-secondary`, which is what the
+   `font-stretch` below needs to do anything at all. */
 @utility wordmark {
   font-weight: 800;
   font-stretch: 115%;
@@ -353,7 +382,7 @@ html.lenis body {
   border-radius: 999px;
   color: var(--accent);
   font-size: 0.625rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.14em;
   line-height: 1.15;
   padding: 0.75rem 0.55rem;
