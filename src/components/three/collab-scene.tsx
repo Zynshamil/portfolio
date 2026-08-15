@@ -6,36 +6,9 @@ import * as THREE from "three";
 
 import { collaborators } from "@/content/site";
 import { useTheme } from "@/components/ui/theme-provider";
+import { DEFAULT_THEME } from "@/lib/theme";
+import { NETWORK_PALETTES } from "./palettes";
 import { useQuality } from "./use-quality";
-
-type Palette = {
-  hub: string;
-  peer: string;
-  spark: string;
-  line: string;
-  blending: THREE.Blending;
-  opacity: number;
-};
-
-/** Accent-led palette on dark, ink-led on light — mirrors the hero field. */
-const PALETTES: Record<"dark" | "light", Palette> = {
-  dark: {
-    hub: "#ffd447",
-    peer: "#8ab0ff",
-    spark: "#6f93ff",
-    line: "#6f93ff",
-    blending: THREE.AdditiveBlending,
-    opacity: 0.55,
-  },
-  light: {
-    hub: "#17469a",
-    peer: "#2457d6",
-    spark: "#6a86c9",
-    line: "#2457d6",
-    blending: THREE.NormalBlending,
-    opacity: 0.5,
-  },
-};
 
 /** One hub per organisation on the ring below — the section's actual subject. */
 const HUB_COUNT = collaborators.length;
@@ -201,8 +174,8 @@ function CollaborationNetwork({
   animate: boolean;
   pointer: React.RefObject<{ x: number; y: number }>;
 }) {
-  const { resolvedTheme } = useTheme();
-  const palette = PALETTES[resolvedTheme ?? "dark"];
+  const { theme } = useTheme();
+  const palette = NETWORK_PALETTES[theme ?? DEFAULT_THEME];
   const { invalidate } = useThree();
 
   const groupRef = useRef<THREE.Group>(null);
@@ -549,7 +522,7 @@ function CollaborationNetwork({
  *  as the hero so nothing paints until WebGL and the palette are both ready. */
 export function CollaborationScene() {
   const quality = useQuality();
-  const { resolvedTheme } = useTheme();
+  const { theme } = useTheme();
   const pointer = useRef({ x: 0, y: 0 });
   const [inView, setInView] = useState(false);
   const [tabVisible, setTabVisible] = useState(true);
@@ -582,7 +555,7 @@ export function CollaborationScene() {
   }, []);
 
   const showCanvas =
-    quality !== null && quality.tier !== "off" && resolvedTheme !== null;
+    quality !== null && quality.tier !== "off" && theme !== null;
 
   return (
     <div ref={containerRef} className="pointer-events-none absolute inset-0">

@@ -6,6 +6,7 @@ import { SmoothScroll } from "@/components/ui/smooth-scroll";
 import { Nav } from "@/components/ui/nav";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { IntroProvider } from "@/components/ui/intro";
+import { BRAND } from "@/lib/brand";
 import { themeInitScript } from "@/lib/theme";
 import { introInitScript } from "@/lib/intro";
 import "./globals.css";
@@ -115,12 +116,13 @@ export const metadata: Metadata = {
   // the problem here — whereas the tag only ever verifies one URL prefix.
 };
 
+// One colour, not a pair keyed to the system preference: blue is the default
+// for everyone, so the browser chrome should match it on arrival. Nothing here
+// tracks the picker — a visitor who chooses another of the four palettes keeps
+// blue chrome, which is the same trade the media-query version made in reverse.
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fff7df" },
-    { media: "(prefers-color-scheme: dark)", color: "#153d8a" },
-  ],
-  colorScheme: "light dark",
+  themeColor: BRAND.blue,
+  colorScheme: "dark",
 };
 
 export default function RootLayout({
@@ -138,7 +140,7 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: introInitScript }} />
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:rounded-full focus:bg-accent focus:px-5 focus:py-2 focus:text-sm focus:font-medium focus:text-accent-ink"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:rounded-pill focus:bg-accent focus:px-5 focus:py-2 focus:text-sm focus:font-medium focus:text-accent-ink"
         >
           Skip to content
         </a>

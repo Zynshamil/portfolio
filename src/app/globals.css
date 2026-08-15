@@ -1,20 +1,97 @@
 @import "tailwindcss";
 
-/* ------------------------------------------------------------------ *
- * Design tokens
+/* ================================================================== *
+ * HOW THIS FILE IS ORGANISED
  *
- * Dark is the native palette and lives on :root. Light is applied either by
- * `data-theme="light"` (set before first paint by the inline script in the root
- * layout) or, for visitors without JavaScript, by the system preference.
- * The two light blocks are deliberate duplicates — CSS cannot share one
- * declaration list between an attribute selector and a media query.
+ *   1. Constants   — values identical in every palette (measure, motion, brand)
+ *   2. Palettes    — the four colour sets, and nothing but colour
+ *   3. Derived     — tokens computed from a palette, written once for all four
+ *   4. @theme      — what Tailwind is allowed to see, i.e. the public API
+ *   5. Base        — element defaults
+ *   6. Utilities   — layout, type and the component recipes
+ *
+ * The rule that keeps this scalable: **a component never spells a colour, a
+ * radius, a shadow or a duration.** It names a token or a recipe. So a change
+ * to any of them lands in one place here and reaches every screen at once.
+ *
+ * Adding a fifth palette is three edits, and TypeScript enforces the last two:
+ *   1. a block in §2 below
+ *   2. an entry in `THEMES` in `src/lib/theme.ts`
+ *   3. an entry in each record in `src/components/three/palettes.ts`
+ * ================================================================== */
+
+/* ------------------------------------------------------------------ *
+ * 1. Constants — the same in every palette
  * ------------------------------------------------------------------ */
 :root {
+  /* Page measure */
+  --page-x: 1.5rem;
+  --max-w: 78rem;
+
+  /* Vertical rhythm between sections. One knob for the whole page's pacing. */
+  --section-y: 5rem;
+  --section-y-lg: 7rem;
+
+  /* Corner radii, named by the thing they belong to rather than by size — so
+     "make the cards squarer" is one edit here and never a hunt for `rounded-2xl`. */
+  --radius-btn: 0.25rem;
+  --radius-chip: 0.75rem;
+  --radius-card: 1rem;
+  --radius-pill: 999px;
+
+  /* Motion. `--motion-base` is also wired to Tailwind's default transition
+     duration in §4, so a bare `transition-colors` already runs at house pace
+     and call sites only name a duration when they mean to differ. */
+  --motion-fast: 200ms;
+  --motion-base: 300ms;
+  --motion-slow: 500ms;
+
+  /* The sign-paint colours. Deliberately NOT part of any palette: the intro
+     curtain and the browser chrome are the site introducing itself, and they
+     look the same whichever palette the visitor goes on to choose.
+     Mirrored in `src/lib/brand.ts` for the places that need them in JS. */
+  --brand-blue: #153d8a;
+  --brand-gold: #ffd447;
+  --brand-orange: #ed5d32;
+}
+
+/* ------------------------------------------------------------------ *
+ * 2. Palettes
+ *
+ * Blue is the native one and lives on bare :root, so it is what every visitor
+ * gets: no-JS ones, and anyone whose system is set to light. The system
+ * preference is deliberately not read anywhere — the page leads with its own
+ * colour, and the other three are a choice. They arrive as `data-theme`,
+ * stamped before first paint by the inline script in the root layout.
+ *
+ * Each palette is also selectable as `.theme-<id>` so the swatches in the nav
+ * menu can wear it. That is why every block below is a selector list rather
+ * than four `:root` rules: a swatch is a live sample of the real palette, not
+ * a second copy of it that can drift.
+ *
+ * Blue and paper are the house pair — sign-painter colour, warm stock, the page
+ * as a printed object. Midnight and white are the plain pair: an ordinary dark
+ * and an ordinary light for anyone who wants the work on a quiet ground.
+ *
+ * Plain does not mean grey. Both of them keep the blue-and-gold type colours,
+ * because a monochrome page here read as clinical rather than calm — pure black
+ * on pure white and pure white on pure black are the two harshest pairs on a
+ * screen, and the site stops looking like itself. So white is the paper ink
+ * moved onto a white sheet, and midnight is the gold accent on a soft near-
+ * black. Neither ever reaches #000 or #fff for a large area.
+ *
+ * Every block sets exactly the same list of tokens. Nothing else in this file
+ * may introduce a colour — §3 derives the rest from what is here.
+ * ------------------------------------------------------------------ */
+
+/* Blue — deep sign-painter's cobalt. Yellow carries the important words; the
+   orange is a restrained print registration accent, never a third competing
+   interface colour. */
+:root,
+:root[data-theme="blue"],
+.theme-blue {
   color-scheme: dark;
 
-  /* A deep sign-painter's blue gives the page its immediate point of view.
-     Yellow carries the important words; the orange is a restrained print
-     registration accent, never a third competing interface colour. */
   --bg: #153d8a;
   --line: rgba(255, 230, 121, 0.3);
   --line-strong: rgba(255, 230, 121, 0.58);
@@ -30,24 +107,68 @@
   /* Third-party logos are fixed artwork drawn for light backgrounds — several
      ship with an opaque near-white plate baked into the file. So the chip they
      sit on is the one surface on the page that does NOT follow --bg: it stays
-     this warm light tone in both themes, which is why it is declared here and
-     never overridden below. Following the theme would multiply the dark marks
-     into the blue page and lose them. */
+     light in every palette, warm under the house pair and neutral under the
+     monochrome one. Following the theme would multiply the dark marks into the
+     page and lose them. */
   --logo-plate: #fff7df;
+
+  /* Cast shadows, as an unpremultiplied triplet so §3 can vary the alpha.
+     Soot on a dark page; the light palettes below use their own ink instead. */
+  --shadow-rgb: 0 0 0;
+  --shadow-alpha: 0.55;
 
   /* Film grain sits on a dark page, so it lightens. */
   --grain-blend: overlay;
   --grain-opacity: 0.045;
 
-  /* Hero glow behind the particles. */
+  /* Hero glow behind the particles, and the sunburst field over it. */
   --glow-accent: rgba(255, 212, 71, 0.16);
   --glow-indigo: rgba(16, 45, 111, 0.28);
   --glow-halo: rgba(237, 93, 50, 0.13);
-  --page-x: 1.5rem;
-  --max-w: 78rem;
+  --field-ray: rgba(255, 212, 71, 0.13);
+  --field-shade: rgba(11, 42, 108, 0.22);
 }
 
-:root[data-theme="light"] {
+/* Midnight — the ordinary dark theme. A soft near-black with a trace of blue in
+   it rather than a true black, off-white text rather than #fff, and the house
+   gold kept as the accent so the page still reads as this site at night. */
+:root[data-theme="midnight"],
+.theme-midnight {
+  color-scheme: dark;
+
+  --bg: #101216;
+  --line: rgba(232, 233, 237, 0.12);
+  --line-strong: rgba(232, 233, 237, 0.3);
+
+  --fg: #e8e9ed;
+  --fg-muted: #a9aeb9;
+  --fg-subtle: #7d838f;
+
+  --accent: #ffd447;
+  --accent-ink: #14161a;
+  --offset: #e05f36;
+
+  --logo-plate: #f4f4f1;
+
+  --shadow-rgb: 0 0 0;
+  --shadow-alpha: 0.55;
+
+  /* Lighter than blue's: there is less colour here for grain to sit in, so the
+     same amount of it reads as noise. */
+  --grain-blend: overlay;
+  --grain-opacity: 0.035;
+
+  --glow-accent: rgba(255, 212, 71, 0.11);
+  --glow-indigo: rgba(122, 134, 158, 0.14);
+  --glow-halo: rgba(224, 95, 54, 0.09);
+  --field-ray: rgba(255, 212, 71, 0.055);
+  --field-shade: rgba(160, 174, 200, 0.05);
+}
+
+/* Paper — warm stock. The accent becomes blue so it still holds strong
+   contrast against it. */
+:root[data-theme="paper"],
+.theme-paper {
   color-scheme: light;
 
   --bg: #fff7df;
@@ -58,11 +179,16 @@
   --fg-muted: #345894;
   --fg-subtle: #5975a5;
 
-  /* On the paper palette, the accent becomes blue so it still holds strong
-     contrast against the warm stock. */
   --accent: #17469a;
   --accent-ink: #fff7df;
   --offset: #ef7447;
+
+  --logo-plate: #fff7df;
+
+  /* The page's own ink, not black: a soot shadow on warm stock reads as dirt
+     rather than as depth, and at these blur radii it greys the whole card. */
+  --shadow-rgb: 18 53 121;
+  --shadow-alpha: 0.18;
 
   --grain-blend: multiply;
   --grain-opacity: 0.022;
@@ -70,42 +196,149 @@
   --glow-accent: rgba(255, 211, 71, 0.35);
   --glow-indigo: rgba(23, 70, 154, 0.12);
   --glow-halo: rgba(239, 116, 71, 0.13);
+  --field-ray: rgba(255, 212, 71, 0.13);
+  --field-shade: rgba(11, 42, 108, 0.22);
 }
 
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme]) {
-    color-scheme: light;
+/* White — the ordinary light theme: paper's ink moved onto a white sheet. Same
+   blue type, same blue accent printing in warm cream, so a highlighted phrase
+   is still blue-and-gold and not a black bar. The rules turn blue-grey rather
+   than mustard, which is the one thing that would look grubby on white.
 
-    --bg: #fff7df;
-    --line: #d9c783;
-    --line-strong: #b99e3b;
+   The gold belongs to the type here, never to the ground. Paper can carry a
+   gold wash because the stock is already warm; laid over white the same wash
+   only makes the sheet look yellowed, so every background layer — the hero
+   sunburst, the glow behind the canvas, the logo plate — is neutral or blue,
+   and the texture the wash used to supply comes from grain instead. This is
+   the grainiest of the four palettes for that reason. */
+:root[data-theme="white"],
+.theme-white {
+  color-scheme: light;
 
-    --fg: #123579;
-    --fg-muted: #345894;
-    --fg-subtle: #5975a5;
+  --bg: #ffffff;
+  --line: rgba(18, 53, 121, 0.16);
+  --line-strong: rgba(18, 53, 121, 0.38);
 
-    --accent: #17469a;
-    --accent-ink: #fff7df;
-    --offset: #ef7447;
+  --fg: #123579;
+  --fg-muted: #345894;
+  /* A step darker than paper's: the eyebrows are 11px, and against a white
+     ground rather than a warm one they need the extra contrast to clear 4.5:1. */
+  --fg-subtle: #52709f;
 
-    --grain-blend: multiply;
-    --grain-opacity: 0.022;
+  --accent: #17469a;
+  --accent-ink: #fff7df;
+  --offset: #ef7447;
 
-    --glow-accent: rgba(255, 211, 71, 0.35);
-    --glow-indigo: rgba(23, 70, 154, 0.12);
-    --glow-halo: rgba(239, 116, 71, 0.13);
-  }
+  /* A hair off white, cooled the same way, so the chip reads as a plate on a
+     white page without the plate looking like aged stock. */
+  --logo-plate: #f4f5f7;
+
+  --shadow-rgb: 18 53 121;
+  --shadow-alpha: 0.16;
+
+  /* Doing the work the gold wash used to: at multiply on a white ground this
+     lands as a fine grey tooth rather than a tint, which is the whole point. */
+  --grain-blend: multiply;
+  --grain-opacity: 0.034;
+
+  --glow-accent: rgba(36, 87, 214, 0.14);
+  --glow-indigo: rgba(23, 70, 154, 0.1);
+  --glow-halo: rgba(239, 116, 71, 0.08);
+  --field-ray: rgba(18, 53, 121, 0.045);
+  --field-shade: rgba(23, 70, 154, 0.07);
 }
 
+/* ------------------------------------------------------------------ *
+ * 3. Derived tokens
+ *
+ * Written once, against whichever palette is live — `var(--fg)` here resolves
+ * to the active palette's value, so these four rules cover all four palettes
+ * and a new palette inherits them for free.
+ *
+ * This is where the interface greys used to be improvised at the call site:
+ * `bg-fg/3`, `bg-fg/[0.06]`, `bg-fg/[0.08]`, `bg-fg/10` were four hand-picked
+ * alphas for what is really one idea in three steps. Naming the steps is what
+ * makes "lift every hover state" a one-line change.
+ * ------------------------------------------------------------------ */
+:root {
+  /* Interface tints, in ascending emphasis: resting fill → hover → selected. */
+  --surface: color-mix(in oklab, var(--fg) 3%, transparent);
+  --surface-hover: color-mix(in oklab, var(--fg) 6%, transparent);
+  --surface-active: color-mix(in oklab, var(--fg) 9%, transparent);
+
+  /* Where a card or a menu actually sits: the page colour, part-transparent,
+     with the backdrop blur behind it doing the rest. */
+  --surface-card: color-mix(in oklab, var(--bg) 55%, transparent);
+  --surface-card-hover: color-mix(in oklab, var(--bg) 70%, transparent);
+  --surface-panel: color-mix(in oklab, var(--bg) 90%, transparent);
+
+  /* The border a neutral hover raises. Accent hovers use `--accent` directly. */
+  --line-hover: color-mix(in oklab, var(--fg) 28%, transparent);
+
+  /* Elevation. Two cast shadows and the printed one — the offset block under
+     the CTA, which is ink rather than shade and so tracks `--offset`. */
+  --elevation-card: 0 18px 50px -20px rgb(var(--shadow-rgb) / var(--shadow-alpha));
+  --elevation-panel: 0 24px 60px -30px
+    rgb(var(--shadow-rgb) / calc(var(--shadow-alpha) * 1.36));
+  --elevation-print: 4px 4px 0 var(--offset);
+  --elevation-print-pressed: 2px 2px 0 var(--offset);
+}
+
+/* ------------------------------------------------------------------ *
+ * 4. The public API
+ *
+ * Everything a component is allowed to name. If a value is not exported here
+ * it cannot be reached from a class, which is the point: it keeps §2 the only
+ * place a colour is decided.
+ *
+ * `inline` matters — it makes Tailwind emit `var(--fg)` rather than a snapshot
+ * of its value, so a palette swap on <html> repaints utilities that were
+ * compiled long before.
+ * ------------------------------------------------------------------ */
 @theme inline {
+  /* Ground and ink */
   --color-bg: var(--bg);
-  --color-line: var(--line);
-  --color-line-strong: var(--line-strong);
   --color-fg: var(--fg);
   --color-muted: var(--fg-muted);
+  --color-subtle: var(--fg-subtle);
+
+  /* Rules */
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-line-hover: var(--line-hover);
+
+  /* Accents */
   --color-accent: var(--accent);
   --color-accent-ink: var(--accent-ink);
+  --color-offset: var(--offset);
+
+  /* Interface fills */
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-surface-active: var(--surface-active);
+  --color-surface-card: var(--surface-card);
+  --color-surface-card-hover: var(--surface-card-hover);
+  --color-surface-panel: var(--surface-panel);
+
+  /* Fixed artwork */
   --color-logo-plate: var(--logo-plate);
+  --color-brand-blue: var(--brand-blue);
+  --color-brand-gold: var(--brand-gold);
+  --color-brand-orange: var(--brand-orange);
+
+  --radius-btn: var(--radius-btn);
+  --radius-chip: var(--radius-chip);
+  --radius-card: var(--radius-card);
+  --radius-pill: var(--radius-pill);
+
+  --shadow-card: var(--elevation-card);
+  --shadow-panel: var(--elevation-panel);
+  --shadow-print: var(--elevation-print);
+  --shadow-print-pressed: var(--elevation-print-pressed);
+
+  /* House pace for every bare `transition-*`, so a component only ever names a
+     duration when it deliberately differs from the rest of the page. */
+  --default-transition-duration: var(--motion-base);
 
   /* Two families, and the `font-primary` / `font-secondary` utilities that set
      them. Primary is SF Pro Display and is the default for the whole page —
@@ -127,7 +360,7 @@
 }
 
 /* ------------------------------------------------------------------ *
- * Base
+ * 5. Base
  * ------------------------------------------------------------------ */
 * {
   border-color: var(--line);
@@ -158,12 +391,10 @@ body {
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
-  border-radius: 4px;
+  border-radius: var(--radius-btn);
 }
 
-/* ------------------------------------------------------------------ *
- * Theme switching
- * ------------------------------------------------------------------ */
+/* ---- Theme switching ---------------------------------------------- */
 
 /* Colours snap during normal browsing (cheap); they cross-fade only for the
    ~340ms after the toggle is pressed, which is when the change is intentional. */
@@ -172,49 +403,18 @@ html.theme-switching *,
 html.theme-switching *::before,
 html.theme-switching *::after {
   transition:
-    background-color 300ms ease,
-    border-color 300ms ease,
-    color 300ms ease,
-    fill 300ms ease,
-    stroke 300ms ease;
+    background-color var(--motion-base) ease,
+    border-color var(--motion-base) ease,
+    color var(--motion-base) ease,
+    fill var(--motion-base) ease,
+    stroke var(--motion-base) ease;
 }
 
-/* Each icon is visible in the theme it switches away from. */
-.theme-icon {
-  transition:
-    opacity 300ms ease,
-    transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-.theme-icon-moon,
-[data-theme="light"] .theme-icon-sun {
-  opacity: 0;
-  transform: rotate(-70deg) scale(0.6);
-}
-.theme-icon-sun,
-[data-theme="light"] .theme-icon-moon {
-  opacity: 1;
-  transform: rotate(0deg) scale(1);
-}
-
-/* No-JS visitors on a light system: same swap, driven by the media query. */
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme]) .theme-icon-sun {
-    opacity: 0;
-    transform: rotate(-70deg) scale(0.6);
-  }
-  :root:not([data-theme]) .theme-icon-moon {
-    opacity: 1;
-    transform: rotate(0deg) scale(1);
-  }
-}
-
-/* ------------------------------------------------------------------ *
- * Intro curtain
- *
+/* ---- Intro curtain ------------------------------------------------- *
  * The overlay is server-rendered so it is already on screen at the first
  * paint, but it stays hidden unless the pre-paint script opts in. Returning
  * visitors and anyone without JavaScript therefore land straight on the site.
- * ------------------------------------------------------------------ */
+ * -------------------------------------------------------------------- */
 #intro {
   display: none;
 }
@@ -232,15 +432,7 @@ html[data-intro="running"] body {
   overflow: hidden;
 }
 
-/* The landing curtain is the one intentionally expressive moment: the warm
-   sign-paint colours and offset printing detail disappear with it, leaving the
-   portfolio itself free to use its own visual system. */
-.intro-sign {
-  color: #ffd447;
-  text-shadow: 0.05em 0.05em 0 #ed5d32;
-}
-
-/* Lenis smooth scroll requirements */
+/* ---- Lenis smooth scroll requirements ------------------------------ */
 html.lenis,
 html.lenis body {
   height: auto;
@@ -252,14 +444,35 @@ html.lenis body {
   overflow: hidden;
 }
 
-/* ------------------------------------------------------------------ *
- * Utilities
- * ------------------------------------------------------------------ */
+/* ================================================================== *
+ * 6. Utilities
+ * ================================================================== */
+
+/* ---- Layout -------------------------------------------------------- */
+
 @utility page {
   width: 100%;
   max-width: var(--max-w);
   margin-inline: auto;
   padding-inline: var(--page-x);
+}
+
+/* The vertical rhythm and closing rule every content section shares. One edit
+   here re-paces the whole page; a new section gets it by naming the class. */
+@utility section-shell {
+  position: relative;
+  border-bottom: 1px solid var(--line);
+  padding-block: var(--section-y);
+
+  @media (width >= 40rem) {
+    padding-block: var(--section-y-lg);
+  }
+}
+
+/* The heavier rule that closes a section's eyebrow-and-heading block. */
+@utility section-head {
+  border-bottom: 2px solid var(--line-strong);
+  padding-bottom: 1.75rem;
 }
 
 /* ---- Poster type -------------------------------------------------- *
@@ -276,10 +489,17 @@ html.lenis body {
  * is on screen is worse than a lower true one, so those stop at 700.
  * ------------------------------------------------------------------- */
 
-/* Fluid display type — scales without breakpoint jumps */
+/* Fluid display type — scales without breakpoint jumps. Every section heading
+   on the page, and the 404.
+
+   It deliberately names no family, so it inherits the body's: Archivo is spent
+   on the hero, the wordmark and the curtain and nowhere else. That makes this
+   the single place the section headings' typeface is decided — add a
+   `font-family` here and all of them move together, which is what stopped
+   About and Collaborators from being set in two different faces. */
 @utility text-display {
   font-size: clamp(2.5rem, 8vw, 6rem);
-  line-height:1;
+  line-height: 1;
   letter-spacing: -0.025em;
   font-weight: 700;
   text-transform: uppercase;
@@ -331,7 +551,9 @@ html.lenis body {
   font-weight: 500;
 }
 
-/* Small bold caps used to tag every section — the fine print on the poster. */
+/* Small bold caps used to tag every section — the fine print on the poster.
+   `eyebrow` carries the subtle colour; `label` is the same face left to
+   inherit, for the call sites that set their own. */
 @utility eyebrow {
   font-size: 0.6875rem;
   font-weight: 700;
@@ -340,7 +562,6 @@ html.lenis body {
   color: var(--fg-subtle);
 }
 
-/* Same fine print, wherever it needs to inherit its own colour. */
 @utility label {
   font-size: 0.6875rem;
   font-weight: 700;
@@ -358,6 +579,140 @@ html.lenis body {
   box-decoration-break: clone;
 }
 
+/* ---- Component recipes -------------------------------------------- *
+ * The static half of each repeated component: border, radius, fill, padding,
+ * type. Interaction stays as Tailwind variants at the call site — it is worth
+ * seeing what a thing does on hover where you read the markup — but every
+ * value those variants use is a token from §3/§4, so the look is still
+ * governed from this file alone.
+ * ------------------------------------------------------------------- */
+
+/* The plate a card sits on. Used by the collaborator links, and by anything
+   later that needs to float over the field. */
+@utility card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+  backdrop-filter: blur(4px);
+  padding: 1.5rem;
+
+  @media (width >= 40rem) {
+    padding: 1.75rem;
+  }
+}
+
+/* The floating menu panel. Heavier rule and blur than a card, because it sits
+   above the page rather than in it. */
+@utility panel {
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-card);
+  background: var(--surface-panel);
+  backdrop-filter: blur(24px);
+  box-shadow: var(--elevation-panel);
+  padding: 0.375rem;
+}
+
+/* One row in that panel. */
+@utility panel-item {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.625rem;
+  border-radius: var(--radius-chip);
+  padding: 0.5rem 0.625rem;
+  text-align: left;
+}
+
+/* A soft pill of metadata — the domains in About. */
+@utility chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* A hairline-ruled tag: the availability badge in the nav and over the hero.
+   Rules top and bottom only, so it reads as a stamped line of fine print
+   rather than as a button.
+
+   Deliberately sets no `display` — the nav's copy is `hidden sm:inline-flex`,
+   and a display here would race those in the cascade. Call sites bring it. */
+@utility rule-tag {
+  align-items: center;
+  gap: 0.625rem;
+  border-block: 1px solid var(--line-strong);
+  padding: 0.5rem 0.75rem;
+}
+
+/* The square plate a third-party logo is dropped onto. The mark fills it edge
+   to edge, so logos that carry their own opaque background get clipped by the
+   corner radius instead of sitting as a hard square inside a ring of chip
+   colour; the ones with real transparency let the plate through. */
+@utility logo-plate {
+  display: flex;
+  flex: none;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-chip);
+  background: var(--logo-plate);
+}
+
+/* The small circled glyph that marks an outbound link. */
+@utility icon-badge {
+  display: grid;
+  flex: none;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  color: var(--accent);
+}
+
+/* The CTA: accent fill with an offset block behind it, printed rather than
+   drop-shadowed. Both the resting and pressed offsets are tokens, so the whole
+   button moves together. */
+@utility btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: var(--radius-btn);
+  background: var(--accent);
+  color: var(--accent-ink);
+  padding: 0.875rem 1.75rem;
+  font-size: 0.875rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: var(--elevation-print);
+}
+
+/* ---- Effects ------------------------------------------------------- */
+
+/* A chip of a palette: the page colour meeting its accent across the diagonal.
+   The colours come from whichever `.theme-*` class sits on the swatch — or,
+   with no class at all, from the palette currently on the page, which is how
+   the nav trigger shows what is on screen without a line of JavaScript. */
+@utility theme-swatch {
+  height: 1.0625rem;
+  width: 1.0625rem;
+  flex: none;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(
+    135deg,
+    var(--bg) 0 52%,
+    var(--accent) 52% 100%
+  );
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+}
+
 /* A tiny misregistration makes the display type feel screen-printed rather
    than digitally perfect. It is deliberately only 0.045em, so the headline
    remains crisp at every size. */
@@ -366,30 +721,21 @@ html.lenis body {
 }
 
 /* The hero's decorative field: a very quiet sunburst over corner shading. It
-   has no text content and is hidden from assistive technology.
+   has no text content and is hidden from assistive technology. Both layers are
+   palette tokens — gold rays on the house pair, a neutral wash on the mono one.
 
    There was a third layer here — a full-height hairline at 70% width — but it
    lined up with nothing on the page and read as a rendering seam rather than
    as print detail, so the sunburst carries the texture on its own. */
 @utility poster-field {
   background:
-    repeating-conic-gradient(from -16deg at 83% 51%, rgba(255, 212, 71, 0.13) 0deg 4deg, transparent 4deg 14deg),
-    linear-gradient(115deg, rgba(11, 42, 108, 0.22), transparent 56%);
+    repeating-conic-gradient(
+      from -16deg at 83% 51%,
+      var(--field-ray) 0deg 4deg,
+      transparent 4deg 14deg
+    ),
+    linear-gradient(115deg, var(--field-shade), transparent 56%);
 }
-
-@utility poster-stamp {
-  border: 2px solid var(--accent);
-  border-radius: 999px;
-  color: var(--accent);
-  font-size: 0.625rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  line-height: 1.15;
-  padding: 0.75rem 0.55rem;
-  text-align: center;
-  text-transform: uppercase;
-}
-
 
 /* Film grain over the whole page — hides gradient banding behind the canvas */
 @utility grain {
@@ -400,6 +746,15 @@ html.lenis body {
   opacity: var(--grain-opacity);
   mix-blend-mode: var(--grain-blend);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* The landing curtain is the one intentionally expressive moment: the warm
+   sign-paint colours and offset printing detail disappear with it, leaving the
+   portfolio itself free to use its own visual system. Brand colours, not
+   palette ones — see §1. */
+@utility intro-sign {
+  color: var(--brand-gold);
+  text-shadow: 0.05em 0.05em 0 var(--brand-orange);
 }
 
 @media (prefers-reduced-motion: reduce) {

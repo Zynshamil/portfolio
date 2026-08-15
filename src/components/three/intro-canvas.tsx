@@ -10,10 +10,10 @@ import { useQuality } from "./use-quality";
 /** A brief, gold-on-cobalt moving object for the opening curtain. */
 function IntroScene() {
   const quality = useQuality();
-  const { resolvedTheme } = useTheme();
+  const { theme } = useTheme();
   const pointer = useRef({ x: 0, y: 0 });
 
-  if (!quality || !resolvedTheme || quality.tier === "off") return null;
+  if (!quality || !theme || quality.tier === "off") return null;
 
   return (
     <Canvas
@@ -28,7 +28,7 @@ function IntroScene() {
         count={Math.min(quality.count, 20000)}
         animate={quality.animate}
         pointer={pointer}
-        theme={resolvedTheme}
+        theme={theme}
         variant="intro"
       />
     </Canvas>

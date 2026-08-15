@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { BRAND, BRAND_INK } from "@/lib/brand";
 import { site } from "@/content/site";
 
 export const alt = `${site.name} — ${site.role}`;
@@ -8,6 +9,12 @@ export const contentType = "image/png";
 /**
  * Generated at build time and applied to every route that does not define its
  * own. Deliberately uses no remote fonts or images so it can never fail a build.
+ *
+ * Painted in the brand colours rather than in a palette: this is the card that
+ * arrives before the site does, so it should look like the curtain a visitor
+ * lands on, not like whichever of the four they might later pick. Those colours
+ * are literals here because `ImageResponse` rasterises with no stylesheet in
+ * scope — `src/lib/brand.ts` is where they are named.
  */
 export default function OpengraphImage() {
   return new ImageResponse(
@@ -19,11 +26,13 @@ export default function OpengraphImage() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: "#08080a",
+          background: BRAND.blue,
           padding: "80px",
           fontFamily: "sans-serif",
         }}
       >
+        {/* The gold ring off the top-right corner, the same mark the intro
+            curtain opens with. */}
         <div
           style={{
             position: "absolute",
@@ -32,8 +41,8 @@ export default function OpengraphImage() {
             width: 760,
             height: 760,
             borderRadius: "50%",
-            background:
-              "radial-gradient(circle, rgba(204,255,51,0.22), rgba(8,8,10,0) 68%)",
+            border: `14px solid ${BRAND.gold}`,
+            opacity: 0.5,
           }}
         />
 
@@ -43,12 +52,12 @@ export default function OpengraphImage() {
               width: 10,
               height: 10,
               borderRadius: "50%",
-              background: "#ccff33",
+              background: BRAND.orange,
             }}
           />
           <div
             style={{
-              color: "#9a99a4",
+              color: BRAND_INK.subtle,
               fontSize: 24,
               letterSpacing: 4,
               textTransform: "uppercase",
@@ -61,7 +70,7 @@ export default function OpengraphImage() {
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div
             style={{
-              color: "#f4f2ee",
+              color: BRAND_INK.paper,
               fontSize: 92,
               letterSpacing: -3,
               lineHeight: 1.05,
@@ -71,7 +80,7 @@ export default function OpengraphImage() {
           </div>
           <div
             style={{
-              color: "#ccff33",
+              color: BRAND.gold,
               fontSize: 40,
               letterSpacing: -1,
               marginTop: 18,
@@ -85,9 +94,9 @@ export default function OpengraphImage() {
           style={{
             display: "flex",
             justifyContent: "space-between",
-            color: "#63626c",
+            color: BRAND_INK.muted,
             fontSize: 24,
-            borderTop: "1px solid #1c1c22",
+            borderTop: `1px solid ${BRAND_INK.rule}`,
             paddingTop: 28,
           }}
         >

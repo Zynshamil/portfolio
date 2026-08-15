@@ -22,8 +22,9 @@ export function Collaborators() {
       aria-labelledby="collaborators-title"
       // Still no rule along the top edge, for the same reason it never had one:
       // About now sits above and closes itself with a bottom border, so a rule
-      // here would only double it.
-      className="relative isolate overflow-hidden border-b border-b-line py-20 sm:py-28"
+      // here would only double it. `isolate` and the clip are this section's
+      // own — they exist for the WebGL layer below, not for the shared shell.
+      className="section-shell isolate overflow-hidden"
     >
       <CollaborationScene />
 
@@ -37,13 +38,10 @@ export function Collaborators() {
       />
 
       <div className="page relative">
-        <div className="flex flex-col justify-between gap-5 border-b-2 border-line-strong pb-7 md:flex-row md:items-end">
+        <div className="section-head flex flex-col justify-between gap-5 md:flex-row md:items-end">
           <div>
             <p className="eyebrow">Selected collaborations</p>
-            <h2
-              id="collaborators-title"
-              className="my-3 text-display "
-            >
+            <h2 id="collaborators-title" className="my-3 text-display">
               Organizations I&apos;ve collaborated with
             </h2>
             <p className="w-full text-sm leading-6 text-muted md:text-right">
@@ -61,23 +59,17 @@ export function Collaborators() {
                 target="_blank"
                 rel="noreferrer noopener"
                 aria-label={`Visit ${collaborator.name} (opens in a new tab)`}
-                className="relative flex min-h-36 flex-col justify-between overflow-hidden rounded-2xl border border-line bg-bg/55 p-6 backdrop-blur-sm transition-all duration-300 group-hover:-translate-y-1 group-hover:border-fg/25 group-hover:bg-bg/70 group-hover:shadow-[0_18px_50px_-20px_rgba(0,0,0,0.55)] sm:p-7"
+                className="card flex min-h-36 flex-col justify-between transition-all group-hover:-translate-y-1 group-hover:border-line-hover group-hover:bg-surface-card-hover group-hover:shadow-card"
                 style={{ animationDelay: `${index * 60}ms` }}
               >
                 <div
                   aria-hidden
-                  className="pointer-events-none absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-accent/70 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                  className="pointer-events-none absolute inset-x-0 -top-px h-px bg-linear-to-r from-transparent via-accent/70 to-transparent opacity-0 transition-opacity group-hover:opacity-100"
                 />
 
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex items-center gap-4">
-                    {/* The mark fills the chip edge to edge. The logos that
-                        carry their own opaque background (a grey square, a
-                        white one) therefore reach the rounded corners and get
-                        clipped by them, instead of sitting as a hard square
-                        inside a ring of chip colour. The ones with real
-                        transparency simply let the plate through. */}
-                    <span className="flex size-12 shrink-0 overflow-hidden rounded-xl border border-line bg-logo-plate transition-colors duration-300 group-hover:border-accent/40">
+                    <span className="logo-plate size-12 transition-colors group-hover:border-accent/40">
                       <Image
                         src={collaborator.icon}
                         alt=""
@@ -95,7 +87,7 @@ export function Collaborators() {
 
                   <span
                     aria-hidden
-                    className="grid size-8 shrink-0 place-items-center rounded-full border border-line text-accent transition-all duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:border-accent group-hover:bg-accent group-hover:text-accent-ink"
+                    className="icon-badge size-8 transition-all group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:border-accent group-hover:bg-accent group-hover:text-accent-ink"
                   >
                     ↗
                   </span>
