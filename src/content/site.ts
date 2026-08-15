@@ -43,7 +43,7 @@ export const site = {
 
   // ⚠️ Set this to your real deployed domain before publishing — it drives
   // canonical URLs, the sitemap and OG tags.
-  url: "https://zynshamills.com",
+  url: "https://www.zynshamills.com",
 
   // Feeds the `sameAs` list in the Person structured data.
   profiles: [
