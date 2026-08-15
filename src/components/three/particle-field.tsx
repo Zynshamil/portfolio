@@ -3,63 +3,20 @@
 import { useEffect, useMemo, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
-import type { ResolvedTheme } from "@/lib/theme";
+import type { Theme } from "@/lib/theme";
+import { FIELD_PALETTES, INTRO_FIELD_PALETTE } from "./palettes";
 import { particleFragment, particleVertex } from "./shaders";
 
 type Props = {
   count: number;
   animate: boolean;
   pointer: React.RefObject<{ x: number; y: number }>;
-  theme: ResolvedTheme;
+  theme: Theme;
   variant?: "hero" | "intro";
 };
 
 /** Frozen clock value used for the still frame when motion is reduced. */
 const STILL_TIME = 12;
-
-/**
- * Additive blending is what gives the dark field its glow, but on paper it only
- * washes toward white — so the light palette draws darker-than-page particles
- * with normal blending instead, and takes its colours from the light tokens
- * (warm neutral shading up to the deepened accent) so the field belongs to the
- * same palette as the type in front of it.
- *
- * The opacity targets are low because ~44k overlapping sprites accumulate hard:
- * anything much above this saturates into a wall that swallows the headline.
- */
-const PALETTES: Record<
-  ResolvedTheme,
-  {
-    low: string;
-    high: string;
-    sparkle: number;
-    blending: THREE.Blending;
-    opacity: number;
-  }
-> = {
-  dark: {
-    low: "#242832",
-    high: "#6f93ff",
-    sparkle: 0.3,
-    blending: THREE.AdditiveBlending,
-    opacity: 0.026,
-  },
-  light: {
-    low: "#9ca8bb",
-    high: "#2457d6",
-    sparkle: -0.12,
-    blending: THREE.NormalBlending,
-    opacity: 0.018,
-  },
-};
-
-const INTRO_PALETTE = {
-  low: "#2855a0",
-  high: "#ffd447",
-  sparkle: 0.38,
-  blending: THREE.AdditiveBlending,
-  opacity: 0.034,
-};
 
 export function ParticleField({
   count,
@@ -68,7 +25,8 @@ export function ParticleField({
   theme,
   variant = "hero",
 }: Props) {
-  const palette = variant === "intro" ? INTRO_PALETTE : PALETTES[theme];
+  const palette =
+    variant === "intro" ? INTRO_FIELD_PALETTE : FIELD_PALETTES[theme];
   const groupRef = useRef<THREE.Group>(null);
   const pointsRef = useRef<THREE.Points>(null);
   const materialRef = useRef<THREE.ShaderMaterial>(null);

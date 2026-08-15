@@ -162,13 +162,21 @@ function IntroCurtain({ onDone }: { onDone: () => void }) {
       // set once here and inherited rather than repeated on each child.
       className="font-secondary pointer-events-none fixed inset-0 z-100"
     >
-      <div data-intro-panel className="absolute inset-0 overflow-hidden bg-[#153d8a]">
-        <div className="absolute -top-[28vmin] -right-[20vmin] h-[72vmin] w-[72vmin] rounded-full border-[min(1.25vw,14px)] border-[#ffd447]/85" />
-        <div className="absolute top-[14%] right-[11%] h-[15vmin] w-[15vmin] rounded-full bg-[#ed5d32]" />
-        <p className="absolute top-7 left-7 text-[10px] font-extrabold tracking-[0.18em] text-[#ffd447] uppercase sm:top-10 sm:left-10">
+      {/* Brand colours, not palette ones: the curtain is the site introducing
+          itself and looks the same whichever of the four the visitor has
+          chosen. They are `--brand-*` in §1 of `globals.css`, so the cobalt is
+          named once for the panel, the chrome and the share card rather than
+          spelled out at each. */}
+      <div
+        data-intro-panel
+        className="absolute inset-0 overflow-hidden bg-brand-blue"
+      >
+        <div className="absolute top-[-28vmin] right-[-20vmin] size-[72vmin] rounded-pill border-[min(1.25vw,14px)] border-brand-gold/85" />
+        <div className="absolute top-[14%] right-[11%] size-[15vmin] rounded-pill bg-brand-orange" />
+        <p className="absolute top-7 left-7 text-[10px] font-extrabold tracking-[0.18em] text-brand-gold uppercase sm:top-10 sm:left-10">
           Full-stack developer / India + worldwide
         </p>
-        <p className="absolute right-7 bottom-7 text-right text-[10px] font-extrabold tracking-[0.18em] text-[#ffd447] uppercase sm:right-10 sm:bottom-10">
+        <p className="absolute right-7 bottom-7 text-right text-[10px] font-extrabold tracking-[0.18em] text-brand-gold uppercase sm:right-10 sm:bottom-10">
           Websites · apps · systems
         </p>
       </div>
@@ -212,7 +220,7 @@ function Masked({ children, dot }: { children: ReactNode; dot?: boolean }) {
       <span
         data-intro-char
         data-intro-dot={dot ? "" : undefined}
-        className={dot ? "inline-block text-[#ed5d32]" : "inline-block"}
+        className={dot ? "inline-block text-brand-orange" : "inline-block"}
         style={{ transform: "translateY(105%)" }}
       >
         {children}

@@ -17,7 +17,7 @@ import { useQuality } from "./use-quality";
  */
 export function HeroScene() {
   const quality = useQuality();
-  const { resolvedTheme } = useTheme();
+  const { theme } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
   const pointer = useRef({ x: 0, y: 0 });
   const [inView, setInView] = useState(true);
@@ -52,7 +52,7 @@ export function HeroScene() {
   // Both the quality tier and the theme resolve in mount effects, so waiting for
   // them costs nothing and avoids painting the field in the wrong palette first.
   const showCanvas =
-    quality !== null && quality.tier !== "off" && resolvedTheme !== null;
+    quality !== null && quality.tier !== "off" && theme !== null;
 
   return (
     <div ref={containerRef} className="absolute inset-0">
@@ -76,7 +76,7 @@ export function HeroScene() {
             count={quality.count}
             animate={quality.animate}
             pointer={pointer}
-            theme={resolvedTheme}
+            theme={theme}
           />
         </Canvas>
       )}

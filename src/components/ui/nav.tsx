@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { site } from "@/content/site";
 import { cn } from "@/lib/utils";
-import { ThemeToggle } from "./theme-toggle";
+import { ThemeMenu } from "./theme-menu";
 
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
@@ -52,7 +52,7 @@ export function Nav() {
             </a>
           )}
 
-          <ThemeToggle />
+          <ThemeMenu />
         </div>
       </nav>
     </header>

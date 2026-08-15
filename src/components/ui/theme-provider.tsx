@@ -10,23 +10,22 @@ import {
   useSyncExternalStore,
   type ReactNode,
 } from "react";
-import { THEME_KEY, type ResolvedTheme, type Theme } from "@/lib/theme";
+import { normalizeTheme, THEME_KEY, type Theme } from "@/lib/theme";
 
 type ThemeContextValue = {
-  /** What the visitor asked for — "system" until they pick a side. */
-  theme: Theme;
-  /** What is actually on screen. Null on the server and during hydration. */
-  resolvedTheme: ResolvedTheme | null;
+  /**
+   * The palette on screen. Blue unless the visitor picked another from the nav
+   * menu — the system preference is never consulted. Null on the server and
+   * during hydration.
+   */
+  theme: Theme | null;
   setTheme: (theme: Theme) => void;
-  toggleTheme: () => void;
 };
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 /** How long the cross-fade class stays on <html> after a switch. */
 const SWITCH_MS = 340;
-
-const LIGHT_QUERY = "(prefers-color-scheme: light)";
 
 /* ------------------------------------------------------------------ *
  * The preference lives in localStorage, not in React, so it is read as an
@@ -35,26 +34,24 @@ const LIGHT_QUERY = "(prefers-color-scheme: light)";
  * ------------------------------------------------------------------ */
 const listeners = new Set<() => void>();
 
-function readPreference(): Theme {
+function readTheme(): Theme {
   try {
-    const stored = window.localStorage.getItem(THEME_KEY);
-    return stored === "light" || stored === "dark" ? stored : "system";
+    return normalizeTheme(window.localStorage.getItem(THEME_KEY));
   } catch {
-    return "system";
+    return normalizeTheme(null);
   }
 }
 
-function writePreference(next: Theme) {
+function writeTheme(next: Theme) {
   try {
-    if (next === "system") window.localStorage.removeItem(THEME_KEY);
-    else window.localStorage.setItem(THEME_KEY, next);
+    window.localStorage.setItem(THEME_KEY, next);
   } catch {
     // Private mode or blocked storage — the session still switches.
   }
   listeners.forEach((notify) => notify());
 }
 
-function subscribePreference(onStoreChange: () => void) {
+function subscribeTheme(onStoreChange: () => void) {
   listeners.add(onStoreChange);
   // "storage" only fires for other tabs, which is exactly what we cannot see.
   window.addEventListener("storage", onStoreChange);
@@ -64,44 +61,29 @@ function subscribePreference(onStoreChange: () => void) {
   };
 }
 
-function subscribeSystem(onStoreChange: () => void) {
-  const query = window.matchMedia(LIGHT_QUERY);
-  query.addEventListener("change", onStoreChange);
-  return () => query.removeEventListener("change", onStoreChange);
-}
-
-function readSystem(): ResolvedTheme {
-  return window.matchMedia(LIGHT_QUERY).matches ? "light" : "dark";
-}
-
-const serverPreference = () => "system" as Theme;
-const serverSystem = () => null;
+// Null rather than the default, so nothing paints in a palette the stored
+// preference is about to overturn on the first client render.
+const serverTheme = () => null;
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const theme = useSyncExternalStore(
-    subscribePreference,
-    readPreference,
-    serverPreference,
-  );
-  const systemTheme = useSyncExternalStore(
-    subscribeSystem,
-    readSystem,
-    serverSystem,
+  const theme = useSyncExternalStore<Theme | null>(
+    subscribeTheme,
+    readTheme,
+    serverTheme,
   );
 
-  const resolvedTheme = theme === "system" ? systemTheme : theme;
   const switchTimer = useRef<number | undefined>(undefined);
 
   // The inline script in the root layout already stamped this before first
-  // paint; keeping it in sync here covers later switches and system changes.
+  // paint; keeping it in sync here covers later switches and other tabs.
   useEffect(() => {
-    if (resolvedTheme) document.documentElement.dataset.theme = resolvedTheme;
-  }, [resolvedTheme]);
+    if (theme) document.documentElement.dataset.theme = theme;
+  }, [theme]);
 
   useEffect(() => () => window.clearTimeout(switchTimer.current), []);
 
   const setTheme = useCallback((next: Theme) => {
-    writePreference(next);
+    writeTheme(next);
 
     // Colours snap by default. Opting into transitions only for the duration of
     // a deliberate switch keeps scrolling cheap but makes the flip feel intentional.
@@ -114,14 +96,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     );
   }, []);
 
-  const toggleTheme = useCallback(() => {
-    setTheme(resolvedTheme === "light" ? "dark" : "light");
-  }, [resolvedTheme, setTheme]);
-
-  const value = useMemo(
-    () => ({ theme, resolvedTheme, setTheme, toggleTheme }),
-    [theme, resolvedTheme, setTheme, toggleTheme],
-  );
+  const value = useMemo(() => ({ theme, setTheme }), [theme, setTheme]);
 
   return <ThemeContext value={value}>{children}</ThemeContext>;
 }
