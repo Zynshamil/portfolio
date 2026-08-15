@@ -44,6 +44,26 @@ export const hero = {
 };
 
 /**
+ * The one block of running prose on the site. It exists for two audiences at
+ * once: a visitor deciding whether to email, and a search engine with nothing
+ * else to read — the rest of the page is a headline, a button and six company
+ * names, which is far too thin to rank for anything.
+ *
+ * It says the name once and then talks about the work. The other spellings are
+ * handled by `alternateNames` in the structured data, where a search engine
+ * reads them and a visitor never has to — nobody should land here and be told
+ * how their host spells his own name.
+ */
+export const about = {
+  eyebrow: "About",
+  heading: "Who you're working with",
+  paragraphs: [
+    "I'm Zyn Shamil, a freelance full-stack developer building fast, unusual web experiences for teams worldwide, from Kerala, India.",
+    "I work the whole stack: React and Next.js at the front, Node and Python behind it, and the DevOps to get it shipped. Recent work spans WebGL interfaces, retail management systems and financial data platforms.",
+  ],
+};
+
+/**
  * The pinned stage the hero folds into on the way down the page. Everything
  * here is placeholder-friendly — swap the wording freely, the layout is driven
  * by the viewport rather than by the length of these strings.
