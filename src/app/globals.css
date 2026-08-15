@@ -107,9 +107,23 @@
   --color-accent-ink: var(--accent-ink);
   --color-logo-plate: var(--logo-plate);
 
-  /* Deliberately the only family on the page. */
-  --font-sans:
-    var(--font-sans-var), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* Two families, and the `font-primary` / `font-secondary` utilities that set
+     them. Primary is SF Pro Display and is the default for the whole page —
+     its fallbacks lead with the system UI faces, which on Apple hardware is SF
+     itself, so a visitor who never gets the webfont still reads the page in
+     the typeface it was set in.
+
+     Secondary is Archivo and is the poster voice, spent in exactly three
+     places: the hero section, the nav wordmark and the intro curtain. It is
+     opt-in per element rather than inherited, so it cannot leak into body copy.
+     `text-hero` and `wordmark` are cut to its metrics and to its 900 weight,
+     and go wrong under any other family — see the notes on each. */
+  --font-primary:
+    var(--font-sf-pro), -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-secondary:
+    var(--font-archivo), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-sans: var(--font-primary);
 }
 
 /* ------------------------------------------------------------------ *

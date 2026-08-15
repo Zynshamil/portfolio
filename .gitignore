@@ -24,6 +24,10 @@
 .DS_Store
 *.pem
 
+# Apple's SF Pro Display originals — ~2.3MB each, and only the source for the
+# subset .woff2 files next to them, which are committed and are what ships.
+/fonts/*.otf
+
 # debug
 npm-debug.log*
 yarn-debug.log*
