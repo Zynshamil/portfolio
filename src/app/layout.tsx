@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Archivo } from "next/font/google";
-import { site, hero } from "@/content/site";
+import { site, hero, about } from "@/content/site";
 import { SmoothScroll } from "@/components/ui/smooth-scroll";
 import { Nav } from "@/components/ui/nav";
 import { ThemeProvider } from "@/components/ui/theme-provider";
@@ -30,9 +30,17 @@ export const metadata: Metadata = {
     default: title,
     template: `%s — ${site.name}`,
   },
-  description: hero.intro,
+  // Deliberately not `hero.intro`, which is a list of services and names
+  // nobody. A search for the name gets a snippet that answers it, while the
+  // social cards below keep the punchier line — a meta description and an
+  // og:description are read by different audiences.
+  description: about.paragraphs[0],
+  // Google ignores this tag outright; it is here for Bing and costs nothing.
+  // The spellings that matter are carried by the title, the About copy and the
+  // `alternateName` list in the structured data, not by this.
   keywords: [
     site.name,
+    ...site.alternateNames,
     "Next.js developer",
     "React developer",
     "Three.js developer",
@@ -61,6 +69,11 @@ export const metadata: Metadata = {
     googleBot: { index: true, follow: true, "max-image-preview": "large" },
   },
   alternates: { canonical: "/" },
+  // Search Console verification goes here if you use the HTML-tag method:
+  //   verification: { google: "<token from Search Console>" },
+  // Prefer the DNS TXT method instead. It verifies a *Domain* property, which
+  // covers the apex, www, http and https in one — and that split is exactly
+  // the problem here — whereas the tag only ever verifies one URL prefix.
 };
 
 export const viewport: Viewport = {

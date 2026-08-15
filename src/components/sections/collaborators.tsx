@@ -20,10 +20,9 @@ export function Collaborators() {
     <section
       id="collaborators"
       aria-labelledby="collaborators-title"
-      // The first thing to arrive after the pinned stage releases. Deliberately
-      // no rule along the top edge: the stage fades its field into the page
-      // colour on the way out, and any line here would put a hard seam exactly
-      // where the two are supposed to be indistinguishable.
+      // Still no rule along the top edge, for the same reason it never had one:
+      // About now sits above and closes itself with a bottom border, so a rule
+      // here would only double it.
       className="relative isolate overflow-hidden border-b border-b-line py-20 sm:py-28"
     >
       <CollaborationScene />
